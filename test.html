@@ -1,118 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <title>Swiper demo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
-  <!-- Link Swiper's CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursor Follower</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <!-- Demo styles -->
-  <style>
-    html,
-    body {
-      position: relative;
-      height: 100%;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #fce4ec;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-    body {
-      background: #000;
-      font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      color: #fff;
-      margin: 0;
-      padding: 0;
-    }
-     main{
-        height: 100vh;
-        width: 100%;
-     }
-    .swiper {
-      height: 100vh;
-      width: 100vw;
-      background-color: red;
-    }
+        .cursor-follower {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ff6b6b;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.8;
+            mix-blend-mode: normal;
+        }
 
-    .swiper-slide {
-      text-align: center;
-      font-size: 18px;
-      background: #444;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-    }
+        .cursor-follower.hover {
+            transform: translate(-50%, -50%) scale(2);
+            opacity: 0.6;
+        }
 
-    .swiper-slide img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
 
-    .swiper {
-      width: 100%;
-      height: 300px;
-      margin: 20px auto;
-    }
+        .portfolio-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 80px;
+            letter-spacing: 1px;
+        }
 
-    .append-buttons {
-      text-align: center;
-      margin-top: 20px;
-    }
+        h1 {
+            font-size: clamp(60px, 10vw, 120px);
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 60px;
+            line-height: 1.1;
+        }
 
-    .append-buttons button {
-      display: inline-block;
-      cursor: pointer;
-      border: 1px solid #007aff;
-      color: #007aff;
-      text-decoration: none;
-      padding: 4px 10px;
-      border-radius: 4px;
-      margin: 0 10px;
-      font-size: 13px;
-    }
-  </style>
+        .interactive-area {
+            display: inline-block;
+            padding: 20px 40px;
+            background: white;
+            border-radius: 12px;
+            font-size: 18px;
+            color: #333;
+            margin: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .interactive-area:hover {
+            transform: translateY(-5px);
+        }
+
+        .demo-section {
+            margin-top: 100px;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
 </head>
-
 <body>
-  <!-- Swiper -->
-<main>
-  <div #swiperRef="" class="swiper mySwiper">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">Slide 1</div>
-      <div class="swiper-slide">Slide 2</div>
-      <div class="swiper-slide">Slide 3</div>
-      <div class="swiper-slide">Slide 4</div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+
+    <div class="content">
+        <div class="portfolio-label">Portfolio ▼</div>
+        
+        <h1>The work</h1>
+
+        <div class="interactive-area">Hover over me!</div>
+        <div class="interactive-area">And me too!</div>
+
+        <div class="demo-section">
+            <div class="demo-grid">
+                <div class="card">
+                    <div class="card-title">Project 01</div>
+                    <div class="card-text">Hover to see the cursor grow</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Project 02</div>
+                    <div class="card-text">Interactive elements</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Project 03</div>
+                    <div class="card-text">Smooth animations</div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-pagination"></div>
-  </div>    
-</main>
 
+    <script>
+        const cursor = document.getElementById('cursorFollower');
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
 
-  <!-- Swiper JS -->
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        // Update mouse position
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
 
-  <!-- Initialize Swiper -->
-  <script>
-    var swiper = new Swiper(".mySwiper", {
-      slidesPerView: 3,
-      centeredSlides: true,
-      spaceBetween: 30,
-      pagination: {
-        el: ".swiper-pagination",
-        type: "fraction",
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-    });
+        // Smooth cursor following animation
+        function animateCursor() {
+            const speed = 0.15;
+            
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            
+            requestAnimationFrame(animateCursor);
+        }
 
-  </script>
+        animateCursor();
+
+        // Get all interactive elements
+        const interactiveElements = document.querySelectorAll('.interactive-area, .card, h1');
+
+        // Add hover effect
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+            });
+        });
+
+        // Hide cursor when it leaves the window
+        document.addEventListener('mouseleave', () => {
+            cursor.style.opacity = '0';
+        });
+
+        document.addEventListener('mouseenter', () => {
+            cursor.style.opacity = '1';
+        });
+    </script>
 </body>
-
 </html>
