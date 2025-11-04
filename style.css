@@ -1,0 +1,180 @@
+@font-face {
+    font-family: rejoy;
+    src: url(/fonts/Futura-Bold.ttf);
+}
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, 
+body{
+    height: 100%;
+    width: 100%;
+}
+
+body{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: #111;
+}
+
+main{
+    /* min-height: 100vh; */
+    width: 100%;
+    position: relative;
+}
+
+ header{
+    width: 100%;
+    padding: 1.4rem;
+    background: transparent;
+    position: absolute;
+    left: 0;
+    z-index: 1;
+    /* display: none; */
+ }
+
+ nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ }
+
+ nav .logo{
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff;
+ }
+
+ nav ul{
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+ }
+
+ nav ul li{
+    font-size: 1.2rem;
+    color: #fff;
+ }
+
+ nav button{
+    border: none;
+    outline: none;
+    padding: 0.8rem 1.4rem;
+    background-color: #A97FFD;
+    color: #fff;
+    border-radius: 8px;
+ }
+
+ .container{
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow-y: hidden;
+ }
+
+ .container .items{
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 90vw;
+ }
+
+  .container .items h1{
+    color: #fff;
+    font-weight: bold;
+    font-size: 10vw;
+    line-height: 9vw;
+    font-family: rejoy;
+    text-transform: uppercase;
+    overflow-y: hidden;
+    padding: 0.4rem;
+    /* display: flex; */
+  }
+
+    .container .items h1 span{
+        display:  inline-block;
+    }
+
+    .container .items button{
+        border: none;
+        outline: none;
+        background-color: #A97FFD;
+        color: #fff;
+        height: 40px;
+        width: 140px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-top: 0.8rem;
+        border-radius: 4px;
+    }
+
+ .boat-3d{
+    height: 750px;
+    width: 100%;
+ }
+
+section{
+    height: 100vh;
+   /* background: linear-gradient(to bottom, #111 0%, #555555 25%, #969696 50%, #bfbfbf 75%, #ffffff 100%); */
+   background: #fff;
+   padding: 2rem 0; 
+
+}
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #444;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      scale: 1.1;
+      position: relative;
+    }
+
+    .swiper-slide .item{
+      height: 50px;
+      width: 30%;
+      background-color: black;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 50px;
+      transform: translate(-50%, -50%);
+    }
+
+    .slide1{
+      background-image: url(7.jpg);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .slide2{
+      background-image: url(4.jpg);
+      background-size: cover;
+      background-position: center;
+    }
+    .slide3{
+      background-image: url(evgeni-tcherkasski-Ju7ZiCwu3DU-unsplash.jpg);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .page3{
+      height: 100vh;
+      background-color: red;
+    }
