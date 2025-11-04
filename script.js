@@ -1,4 +1,11 @@
-
+const videoCon = document.querySelector('.page2')
+const playBtn = document.querySelector('#play')
+videoCon.addEventListener('mouseenter', () => {
+    gsap.to(playBtn, {
+        scale: 1,
+        opacity: 1
+    })
+})
 
 gsap.from('.items h1' , {
     y: 100,
