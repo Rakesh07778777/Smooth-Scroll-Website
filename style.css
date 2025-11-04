@@ -175,7 +175,7 @@ section{
     }
 
     .slide1{
-      background-image: url(7.jpg);
+      background-image: url(/images/7.jpg);
       background-size: cover;
       background-position: center;
       display: flex;
@@ -184,16 +184,20 @@ section{
     }
 
     .slide2{
-      background-image: url(4.jpg);
+      background-image: url(/images/4.jpg);
       background-size: cover;
       background-position: center;
 
     }
     .slide3{
-      background-image: url(evgeni-tcherkasski-Ju7ZiCwu3DU-unsplash.jpg);
+      background-image: url(/images/evgeni-tcherkasski-Ju7ZiCwu3DU-unsplash.jpg);
       background-size: cover;
       background-position: center;
 
+    }
+    .swiper-button-next{
+      position: absolute;
+      z-index: 999;
     }
 
     .page3{
