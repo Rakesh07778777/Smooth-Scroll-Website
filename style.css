@@ -152,26 +152,36 @@ section{
       background-color: black;
       position: absolute;
       top: 50%;
-      left: 50%;
+      left: 30%;
       border-radius: 50px;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%);
+      transition: all 0.5s ease;
+    }
+
+    .swiper-slide .item:hover{
+      height: 200px;
     }
 
     .slide1{
       background-image: url(7.jpg);
       background-size: cover;
       background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .slide2{
       background-image: url(4.jpg);
       background-size: cover;
       background-position: center;
+
     }
     .slide3{
       background-image: url(evgeni-tcherkasski-Ju7ZiCwu3DU-unsplash.jpg);
       background-size: cover;
       background-position: center;
+
     }
 
     .page3{
