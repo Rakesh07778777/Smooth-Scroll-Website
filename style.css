@@ -127,7 +127,21 @@ section{
    /* background: linear-gradient(to bottom, #111 0%, #555555 25%, #969696 50%, #bfbfbf 75%, #ffffff 100%); */
    background: #fff;
    padding: 2rem 0; 
+   position: relative;
+}
 
+#play{
+   padding: 3vw 1.4vw;
+   background-color: black;
+   color: #fff;
+   font-size: 1.3vw;
+   position: fixed;
+   text-transform: uppercase;
+   font-family: rejoy;
+   border-radius: 50%;
+   z-index: 9;
+   opacity: 0;
+   scale: 0;
 }
 
     .swiper {
