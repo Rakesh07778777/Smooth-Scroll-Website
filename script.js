@@ -1,9 +1,35 @@
 const videoCon = document.querySelector('.page2')
 const playBtn = document.querySelector('#play')
+const prevBtn = document.querySelector('.swiper-button-prev')
+const nextBtn = document.querySelector('.swiper-button-next')
 videoCon.addEventListener('mouseenter', () => {
     gsap.to(playBtn, {
         scale: 1,
         opacity: 1
+    })
+})
+videoCon.addEventListener('mouseleave', () => {
+    gsap.to(playBtn, {
+        scale: 0,
+        opacity: 0
+    })
+})
+prevBtn.addEventListener('mouseleave', () => {
+    gsap.to(playBtn, {
+        scale: 0,
+        opacity: 0
+    })
+})
+nextBtn.addEventListener('mouseleave', () => {
+    gsap.to(playBtn, {
+        scale: 0,
+        opacity: 0
+    })
+})
+videoCon.addEventListener('mousemove', (dets) => {
+    gsap.to(playBtn, {
+        left: dets.x-50,
+        top: dets.y-50
     })
 })
 

@@ -124,24 +124,22 @@ main{
 
 section{
     height: 100vh;
-   /* background: linear-gradient(to bottom, #111 0%, #555555 25%, #969696 50%, #bfbfbf 75%, #ffffff 100%); */
+    width: 100%;
    background: #fff;
    padding: 2rem 0; 
    position: relative;
 }
 
-#play{
-   padding: 3vw 1.4vw;
-   background-color: black;
-   color: #fff;
-   font-size: 1.3vw;
-   position: fixed;
-   text-transform: uppercase;
-   font-family: rejoy;
-   border-radius: 50%;
-   z-index: 9;
-   opacity: 0;
-   scale: 0;
+#play {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  padding: 3vw 1.4vw;
+  background: black;
+  color: white;
+  border-radius: 50%;
+  font-family: rejoy;
+  z-index: 999;
 }
 
     .swiper {
@@ -201,4 +199,5 @@ section{
     .page3{
       height: 100vh;
       background-color: red;
+      position: relative;
     }
