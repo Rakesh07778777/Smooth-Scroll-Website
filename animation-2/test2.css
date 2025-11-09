@@ -143,3 +143,19 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 40px rgba(255, 255, 255, 0.3);
         }
+
+
+        /* Work Section */
+        .work-section {
+            padding: 120px 60px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: clamp(40px, 8vw, 100px);
+            font-weight: 900;
+            margin-bottom: 80px;
+            letter-spacing: -2px;
+            overflow: hidden;
+        }
