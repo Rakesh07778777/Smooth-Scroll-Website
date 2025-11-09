@@ -159,3 +159,18 @@
             letter-spacing: -2px;
             overflow: hidden;
         }
+
+          .section-title .word {
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .section-title .word span {
+            display: inline-block;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 40px;
+        }
