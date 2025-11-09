@@ -275,3 +275,18 @@
             line-height: 1.4;
             color: #ccc;
         }
+
+             .about-content .word {
+            display: inline-block;
+            overflow: hidden;
+            margin-right: 0.3em;
+        }
+
+        .about-content .word span {
+            display: inline-block;
+        }
+
+        .highlight {
+            color: #fff;
+            font-weight: 700;
+        }
