@@ -24,3 +24,24 @@
             transform: translate(-50%, -50%) scale(1);
             opacity: 0.8;
         }
+
+
+
+        .cursor-follower.hover {
+            transform: translate(-50%, -50%) scale(2.5);
+            opacity: 0.5;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+        }
