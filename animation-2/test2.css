@@ -211,3 +211,29 @@
             padding: 40px;
         }
 
+   .project-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .project-category {
+            font-size: 14px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Services Section */
+        .services-section {
+            padding: 120px 60px;
+            background: #0f0f0f;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 60px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
