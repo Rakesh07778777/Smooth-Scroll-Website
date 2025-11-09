@@ -94,3 +94,17 @@
             text-transform: uppercase;
             opacity: 0;
         }
+
+.hero-title {
+            font-size: clamp(60px, 12vw, 180px);
+            font-weight: 900;
+            line-height: 0.95;
+            letter-spacing: -4px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .hero-title .line {
+            display: block;
+            overflow: hidden;
+        }
