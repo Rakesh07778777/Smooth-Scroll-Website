@@ -121,3 +121,39 @@
                 start: 'top 70%',
             }
         });
+
+
+
+
+        // Footer Animations
+        gsap.to('.footer-title', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            scrollTrigger: {
+                trigger: 'footer',
+                start: 'top 80%',
+            }
+        });
+
+        gsap.to('.footer-links', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            stagger: 0.2,
+            scrollTrigger: {
+                trigger: 'footer',
+                start: 'top 80%',
+            },
+            delay: 0.3
+        });
+
+        gsap.to('.copyright', {
+            opacity: 1,
+            duration: 1,
+            scrollTrigger: {
+                trigger: 'footer',
+                start: 'top 80%',
+            },
+            delay: 0.8
+        });
