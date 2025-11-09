@@ -108,3 +108,20 @@
             display: block;
             overflow: hidden;
         }
+
+  .hero-title .line span {
+            display: inline-block;
+            background: linear-gradient(135deg, #fff 0%, #888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(20px, 3vw, 32px);
+            color: #aaa;
+            max-width: 800px;
+            line-height: 1.5;
+            margin-bottom: 60px;
+            opacity: 0;
+        }
