@@ -158,36 +158,6 @@
       
 
 
-        // Section Title Reveals
-        gsap.utils.toArray('.section-title').forEach(title => {
-            gsap.from(title.querySelectorAll('.word span'), {
-                y: 100,
-                opacity: 0,
-                duration: 1,
-                ease: 'power4.out',
-                stagger: 0.1,
-                scrollTrigger: {
-                    trigger: title,
-                    start: 'top 80%',
-                }
-            });
-        });
-
-        // Project Cards Animation
-        gsap.utils.toArray('.project-card').forEach((card, index) => {
-            gsap.to(card, {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: card,
-                    start: 'top 85%',
-                },
-                delay: index * 0.1
-            });
-        });
-
         // Service Cards Animation
         gsap.utils.toArray('.service-card').forEach((card, index) => {
             gsap.to(card, {
