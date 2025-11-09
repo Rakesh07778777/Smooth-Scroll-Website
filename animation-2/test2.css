@@ -256,3 +256,22 @@
             font-weight: 700;
             margin-bottom: 20px;
         }
+
+   .service-description {
+            font-size: 16px;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 120px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-content {
+            font-size: clamp(24px, 4vw, 48px);
+            line-height: 1.4;
+            color: #ccc;
+        }
