@@ -332,3 +332,23 @@
             font-size: 14px;
             opacity: 0;
         }
+
+            @media (max-width: 768px) {
+            nav, .hero, .work-section, .services-section, .about-section, footer {
+                padding-left: 30px;
+                padding-right: 30px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
