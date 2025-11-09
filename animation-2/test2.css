@@ -194,7 +194,16 @@
             position: relative;
             overflow: hidden;
         }
+        .project-image img{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            transition: all 0.8s ease;
+        }
 
+        .project-image img:hover{
+            scale: 1.05;
+        }
    .project-card:nth-child(2) .project-image {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
