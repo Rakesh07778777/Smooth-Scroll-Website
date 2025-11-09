@@ -237,3 +237,22 @@
             max-width: 1600px;
             margin: 0 auto;
         }
+
+  .service-card {
+            text-align: left;
+            opacity: 0;
+        }
+
+        .service-number {
+            font-size: 80px;
+            font-weight: 900;
+            color: #222;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        .service-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
