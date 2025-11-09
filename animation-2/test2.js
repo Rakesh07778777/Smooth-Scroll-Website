@@ -91,3 +91,33 @@
                 delay: index * 0.1
             });
         });
+
+
+
+        // Service Cards Animation
+        gsap.utils.toArray('.service-card').forEach((card, index) => {
+            gsap.to(card, {
+                opacity: 1,
+                x: 0,
+                duration: 1,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 85%',
+                },
+                delay: index * 0.15
+            });
+        });
+
+        // About Section Word Reveal
+        gsap.from('.about-content .word span', {
+            y: 100,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            stagger: 0.03,
+            scrollTrigger: {
+                trigger: '.about-content',
+                start: 'top 70%',
+            }
+        });
