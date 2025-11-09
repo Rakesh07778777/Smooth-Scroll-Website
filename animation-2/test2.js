@@ -22,3 +22,40 @@
         }
 
         animateCursor();
+
+
+        const interactiveElements = document.querySelectorAll('a, .project-card');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // Hero Animations
+        gsap.to('.hero-label', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.3
+        });
+
+        gsap.from('.hero-title .line span', {
+            y: 200,
+            duration: 1.2,
+            ease: 'power4.out',
+            stagger: 0.1,
+            delay: 0.5
+        });
+
+        gsap.to('.hero-subtitle', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 1.2
+        });
+
+        gsap.to('.cta-button', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 1.4
+        });

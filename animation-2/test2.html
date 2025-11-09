@@ -155,66 +155,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
        <script>
-        gsap.registerPlugin(ScrollTrigger);
+      
 
-        // Cursor Animation
-        const cursor = document.getElementById('cursorFollower');
-        let mouseX = 0;
-        let mouseY = 0;
-        let cursorX = 0;
-        let cursorY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        function animateCursor() {
-            const speed = 0.15;
-            cursorX += (mouseX - cursorX) * speed;
-            cursorY += (mouseY - cursorY) * speed;
-            cursor.style.left = cursorX + 'px';
-            cursor.style.top = cursorY + 'px';
-            requestAnimationFrame(animateCursor);
-        }
-
-        animateCursor();
-
-        const interactiveElements = document.querySelectorAll('a, .project-card');
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-        });
-
-        // Hero Animations
-        gsap.to('.hero-label', {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            delay: 0.3
-        });
-
-        gsap.from('.hero-title .line span', {
-            y: 200,
-            duration: 1.2,
-            ease: 'power4.out',
-            stagger: 0.1,
-            delay: 0.5
-        });
-
-        gsap.to('.hero-subtitle', {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            delay: 1.2
-        });
-
-        gsap.to('.cta-button', {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            delay: 1.4
-        });
 
         // Section Title Reveals
         gsap.utils.toArray('.section-title').forEach(title => {
