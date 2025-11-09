@@ -125,3 +125,21 @@
             margin-bottom: 60px;
             opacity: 0;
         }
+
+   .cta-button {
+            display: inline-block;
+            padding: 20px 50px;
+            background: #fff;
+            color: #0a0a0a;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            border-radius: 50px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.3);
+        }
