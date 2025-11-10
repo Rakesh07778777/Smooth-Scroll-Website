@@ -246,7 +246,8 @@ section{
   left: 20%;
   height: 40px;
   width: 60%;
-  background-color: #fff;
+  background-color: #C1AAA5;
+
   overflow: hidden;
 transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 18px;
@@ -255,25 +256,28 @@ transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .height-box{
-  background-color: #C1AAA5;
+  background-color: #ffffff;
   height: 40px;
   border-bottom-left-radius: 18px;
   border-bottom-right-radius: 18px;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  padding-top: 0.4rem;
   /* padding: 2rem; */
   span{
-    color: #Fff;
+    color: #000000;
     font-size: 1.2rem;
+
   }
 }
 .page3-box h3{
-    font-size: 18px;
+    font-size: 12px;
   font-weight: 600;
-  color: #ffffff;
+  color: #0c0c0c;
   margin-bottom: 10px;
-  text-align: center;
+  text-align: end;
+  padding: 0.4rem;
 }
 
 .page3-box:hover{
