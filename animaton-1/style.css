@@ -275,3 +275,18 @@ transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             height: 280px;
 
 }
+.button-container{
+  height: calc(280px - 60px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+  padding: 2rem;
+  button{
+    border: none;
+    padding: 0.8rem 2rem;
+    background-color: red;
+    color: #fff;
+    border-radius: 18px;
+  }
+}
