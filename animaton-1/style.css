@@ -86,7 +86,7 @@ main{
     border: none;
     outline: none;
     padding: 0.8rem 1.4rem;
-    background-color: #A97FFD;
+    background-color: #111111;
     color: #fff;
     border-radius: 8px;
  }
@@ -231,9 +231,37 @@ section{
     }
 
 
-        .page3-image{
+        .page3-image:nth-child(1){
           flex: 1;
           position: relative;
+          background-image: url(image/farshad-sheikhzad-Oxmc8d-axcU-unsplash.jpg);
+          background-size: cover;
+          background-position: center;
+          
+          img{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+          }
+        }
+        .page3-image:nth-child(2){
+          flex: 1;
+          position: relative;
+          background-image: url(image/maksym-tymchyk-lI4WEdQei2w-unsplash.jpg);
+          background-size: cover;
+          background-position: center;
+          img{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+          }
+        }
+        .page3-image:nth-child(3){
+          flex: 1;
+          position: relative;
+          background-image: url(image/vladimir-yelizarov-C43tCJffOh4-unsplash.jpg);
+          background-size: cover;
+          background-position: center;
           img{
             height: 100%;
             width: 100%;
