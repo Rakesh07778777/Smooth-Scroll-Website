@@ -217,7 +217,7 @@ section{
     }
 
     .page3{
-      height: 80vh;
+      height: 100vh;
       position: relative;
       padding: 2rem;
 
@@ -243,9 +243,9 @@ section{
 .page3-image .page3-box{
   position: absolute;
   top: 30%;
-  left: 10%;
-  height: 60px;
-  width: 80%;
+  left: 20%;
+  height: 40px;
+  width: 60%;
   background-color: #fff;
   overflow: hidden;
 transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -255,13 +255,18 @@ transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .height-box{
-  background-color: black;
-  height: 60px;
+  background-color: #C1AAA5;
+  height: 40px;
   border-bottom-left-radius: 18px;
   border-bottom-right-radius: 18px;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+  /* padding: 2rem; */
+  span{
+    color: #Fff;
+    font-size: 1.2rem;
+  }
 }
 .page3-box h3{
     font-size: 18px;
@@ -276,7 +281,7 @@ transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
 }
 .button-container{
-  height: calc(280px - 60px);
+  height: calc(280px - 40px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -289,4 +294,9 @@ transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     color: #fff;
     border-radius: 18px;
   }
+}
+
+
+.page5{
+  height: 100vh;
 }
