@@ -217,8 +217,9 @@ section{
     }
 
     .page3{
-      height: 100vh;
+      height: 80vh;
       position: relative;
+      padding: 2rem;
 
       .page3-images{
         height: 100%;
@@ -226,17 +227,17 @@ section{
         display: flex;
         flex-wrap: wrap;
         gap: 0.8rem;
-        border: 2px solid red;
+      }
+    }
+
 
         .page3-image{
-          flex: 1 1 auto;
-          border: 2px solid rgb(35, 34, 34);
+          flex: 1;
+          position: relative;
           img{
             height: 100%;
             width: 100%;
             object-fit: cover;
           }
         }
-      }
-    }
 
