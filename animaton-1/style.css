@@ -249,17 +249,26 @@ section{
   background-color: #fff;
   overflow: hidden;
 transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 8px;
+  border-radius: 18px;
   cursor: pointer;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
 
+.height-box{
+  background-color: black;
+  height: 60px;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .page3-box h3{
-              font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 10px;
-            text-align: center;
+    font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 .page3-box:hover{
