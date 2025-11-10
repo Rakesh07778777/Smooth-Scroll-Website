@@ -1,4 +1,4 @@
-
+/*
 
   const cursor = document.getElementById('cursorFollower');
         let mouseX = 0;
@@ -33,7 +33,7 @@
             e.addEventListener('mouseenter' ,() => {e.classList.add('hover')})
             e.addEventListener('mouseleave' ,() => {e.classList.remove('hover')})
         })
-
+*/
 
 gsap.from('.items h1' , {
     y: 100,

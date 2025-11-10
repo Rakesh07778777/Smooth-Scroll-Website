@@ -23,7 +23,7 @@ body{
 }
 
 
-        .cursor-follower {
+        /* .cursor-follower {
             position: fixed;
             width: 20px;
             height: 20px;
@@ -40,7 +40,7 @@ body{
         .cursor-follower.hover {
             transform: translate(-50%, -50%) scale(2);
             opacity: 0.6;
-        }
+        } */
 
 
 main{
@@ -92,8 +92,8 @@ main{
  }
 
  nav button:hover{
-              transform: translate(-50%, -50%) scale(2.5);
-            opacity: 0.5;
+    opacity: 0.8;
+    cursor: pointer;
  }
 
  .container{
@@ -218,6 +218,25 @@ section{
 
     .page3{
       height: 100vh;
-      background-color: red;
       position: relative;
+
+      .page3-images{
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        border: 2px solid red;
+
+        .page3-image{
+          flex: 1 1 auto;
+          border: 2px solid rgb(35, 34, 34);
+          img{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+          }
+        }
+      }
     }
+
