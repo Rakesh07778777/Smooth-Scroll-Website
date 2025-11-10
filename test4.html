@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Hover Effect Section</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 1400px;
+            height: 80vh;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .image-box {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .image-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hover-box {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 15px 20px;
+            transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+        }
+
+        .image-box:hover .hover-box {
+            height: 280px;
+        }
+
+        .hover-box h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+        }
+
+        .image-box:hover .button-container {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .btn-tertiary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-tertiary:hover {
+            background: #e0e0e0;
+            transform: scale(1.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: repeat(2, 1fr);
+                height: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .image-box {
+                min-height: 300px;
+            }
+
+            .hover-box h3 {
+                font-size: 16px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Image Box 1 -->
+        <div class="image-box">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=800&fit=crop" alt="Product 1">
+            <div class="hover-box">
+                <h3>Premium Watch</h3>
+                <div class="button-container">
+                    <button class="btn btn-primary">Buy Now</button>
+                    <button class="btn btn-secondary">View Details</button>
+                    <button class="btn btn-tertiary">Learn More</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Box 2 -->
+        <div class="image-box">
+            <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&h=800&fit=crop" alt="Product 2">
+            <div class="hover-box">
+                <h3>Designer Sunglasses</h3>
+                <div class="button-container">
+                    <button class="btn btn-primary">Buy Now</button>
+                    <button class="btn btn-secondary">View Details</button>
+                    <button class="btn btn-tertiary">Learn More</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Box 3 -->
+        <div class="image-box">
+            <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=800&fit=crop" alt="Product 3">
+            <div class="hover-box">
+                <h3>Luxury Shoes</h3>
+                <div class="button-container">
+                    <button class="btn btn-primary">Buy Now</button>
+                    <button class="btn btn-secondary">View Details</button>
+                    <button class="btn btn-tertiary">Learn More</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Box 4 -->
+        <div class="image-box">
+            <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=600&h=800&fit=crop" alt="Product 4">
+            <div class="hover-box">
+                <h3>Wireless Headphones</h3>
+                <div class="button-container">
+                    <button class="btn btn-primary">Buy Now</button>
+                    <button class="btn btn-secondary">View Details</button>
+                    <button class="btn btn-tertiary">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
