@@ -106,4 +106,9 @@ const scroll = new LocomotiveScroll({
         }
 
 
-        
+        const accountBtn = document.querySelector('.js-open');
+const accountBox = document.querySelector('.account');
+
+accountBtn.addEventListener('click', () => {
+    accountBox.classList.toggle('open');
+});
