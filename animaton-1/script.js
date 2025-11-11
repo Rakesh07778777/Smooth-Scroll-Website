@@ -79,3 +79,31 @@ const scroll = new LocomotiveScroll({
     smooth: true
 });
 
+        // Optional: Add parallax effect to video on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const video = document.querySelector('.container video');
+            if (video) {
+                video.style.transform = `translate(-50%, calc(-50% + ${scrolled * 0.5}px))`;
+            }
+        });
+
+        // Optional: Pause video when not in viewport (performance)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
+        });
+
+        const video = document.querySelector('.container video');
+        if (video) {
+            observer.observe(video);
+        }
+
+
+        

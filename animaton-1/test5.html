@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Hero Section</title>
+    <style>
+        @font-face {
+            font-family: rejoy;
+            src: url(/fonts/Futura-Bold.ttf);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+
+        /* Header Navigation */
+        header {
+            width: 100%;
+            padding: 1.4rem;
+            background: transparent;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav ul li {
+            font-size: 1.2rem;
+            color: #fff;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        nav ul li:hover {
+            opacity: 0.7;
+        }
+
+        nav button {
+            border: none;
+            outline: none;
+            padding: 0.8rem 1.6rem;
+            background-color: #fff;
+            color: #111;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+        }
+
+        nav button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,255,255,0.3);
+        }
+
+        /* Hero Container */
+        .container {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Video Background */
+        .container video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        /* Overlay for better text visibility */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.3) 0%,
+                rgba(0, 0, 0, 0.1) 50%,
+                rgba(0, 0, 0, 0.4) 100%
+            );
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Item Box */
+        .container .items {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 90vw;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* Transparent Text with Stroke */
+        .container .items h1 {
+            font-size: clamp(4rem, 8vw, 10rem);
+            font-weight: 900;
+            font-family: rejoy, 'Arial Black', sans-serif;
+            text-transform: uppercase;
+            line-height: 1.1;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.5rem;
+            
+            /* Transparent text with video showing through */
+            color: transparent;
+            -webkit-text-stroke: 2px rgba(255, 255, 255, 0.8);
+            text-stroke: 2px rgba(255, 255, 255, 0.8);
+            
+            /* Clip the background video to text */
+            background: inherit;
+            -webkit-background-clip: text;
+            background-clip: text;
+            
+            /* Animation */
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+        }
+
+        /* Enhanced glow effect on hover */
+        .container .items h1:hover {
+            -webkit-text-stroke: 3px rgba(255, 255, 255, 1);
+            text-stroke: 3px rgba(255, 255, 255, 1);
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+            transition: all 0.3s ease;
+        }
+
+        /* Subtitle or tagline */
+        .container .items .subtitle {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            animation: fadeInUp 1s ease-out 0.3s backwards;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        /* CTA Button */
+        .container .items .cta-button {
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            outline: none;
+            background-color: transparent;
+            color: #fff;
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            animation: fadeInUp 1s ease-out 0.6s backwards;
+            backdrop-filter: blur(10px);
+            text-transform: uppercase;
+        }
+
+        .container .items .cta-button:hover {
+            background-color: rgba(255, 255, 255, 1);
+            color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 4;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::before {
+            content: '';
+            display: block;
+            width: 30px;
+            height: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 25px;
+            position: relative;
+        }
+
+        .scroll-indicator::after {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 3px;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scroll 2s infinite;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        @keyframes scroll {
+            0% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+
+            .container .items h1 {
+                -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.9);
+                text-stroke: 1.5px rgba(255, 255, 255, 0.9);
+            }
+
+            .container .items .subtitle {
+                letter-spacing: 0.2em;
+            }
+
+            .container .items .cta-button {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
+        }
+
+        /* Additional styling for text clarity */
+        @supports (background-clip: text) or (-webkit-background-clip: text) {
+            .container .items h1 {
+                /* Create a layered effect */
+                text-shadow: 
+                    0 0 1px rgba(0, 0, 0, 0.5),
+                    0 3px 8px rgba(0, 0, 0, 0.3);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">TeamSite</div>
+            <ul>
+                <li>Home</li>
+                <li>About</li>
+                <li>Team</li>
+                <li>Projects</li>
+                <li>Services</li>
+            </ul>
+            <button>Get Started</button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Background Video -->
+            <video playsinline muted loop autoplay>
+                <source src="image/3888252-uhd_4096_2160_25fps.mp4" type="video/mp4">
+                <!-- Fallback to a demo video if yours doesn't load -->
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-fashion-model-walking-in-studio-41465-large.mp4" type="video/mp4">
+            </video>
+
+            <!-- Content Box -->
+            <div class="items">
+                <h1>Crafted for those</h1>
+                <h1>who stand apart</h1>
+                <p class="subtitle">Exclusive Collection 2025</p>
+                <button class="cta-button">Explore Now</button>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="scroll-indicator"></div>
+        </div>
+    </main>
+
+    <script>
+        // Optional: Add parallax effect to video on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const video = document.querySelector('.container video');
+            if (video) {
+                video.style.transform = `translate(-50%, calc(-50% + ${scrolled * 0.5}px))`;
+            }
+        });
+
+        // Optional: Pause video when not in viewport (performance)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
+        });
+
+        const video = document.querySelector('.container video');
+        if (video) {
+            observer.observe(video);
+        }
+    </script>
+</body>
+</html>
