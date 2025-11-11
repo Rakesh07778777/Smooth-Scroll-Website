@@ -21,80 +21,69 @@ body{
     background-color: #111;
     position: relative;
 }
-
-
-        /* .cursor-follower {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #ff4848;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.2s ease, opacity 0.2s ease;
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-            mix-blend-mode: normal;
-        }
-
-        .cursor-follower.hover {
-            transform: translate(-50%, -50%) scale(2);
-            opacity: 0.6;
-        } */
-
-
-main{
-    /* min-height: 100vh; */
+header{ 
+    position: absolute;
+    z-index: 999;
     width: 100%;
+    padding: 1.2rem 2rem;
+}
+
+nav{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+ul{
+    list-style: none;
+}
+a{
+    text-decoration: none;
+}
+nav > ul{
+    display: flex;
+    gap: 1.2rem;
+}
+
+nav > ul > li{
+    color: #fff;
+    font-size: 14px;
+    a{
+        color: #fff;
+        text-transform: uppercase;
+    }
+}
+
+.nav-icons{
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
     position: relative;
 }
 
- header{
-    width: 100%;
-    padding: 1.4rem;
-    background: transparent;
-    position: absolute;
-    left: 0;
-    z-index: 999;
-    /* display: none; */
- }
-
- nav{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
- }
-
- nav .logo{
-    font-size: 2rem;
-    font-weight: bold;
-    color: #fff;
- }
-
- nav ul{
-    display: flex;
-    gap: 2rem;
-    list-style: none;
- }
-
- nav ul li{
-    font-size: 1.2rem;
-    color: #fff;
- }
-
- nav button{
+.nav-icons button{
     border: none;
+    padding: 5px;
     outline: none;
-    padding: 0.8rem 1.4rem;
-    background-color: #ffffff;
-    color: #0f0f0f;
-    border-radius: 8px;
- }
-
- nav button:hover{
-    opacity: 0.8;
+    background: none;
     cursor: pointer;
- }
+    display: flex;
+    align-items: center;
+}
+
+
+.nav-icons svg {
+    height: 22px;
+    width: 22px;
+    stroke: #ffffff;
+    stroke-width: 2;
+    fill: none;
+}
+
+.mega-menu{
+    display: none;
+}
+
 
         .container {
             position: relative;
