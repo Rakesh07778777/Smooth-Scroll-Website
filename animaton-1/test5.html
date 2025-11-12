@@ -3,256 +3,614 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Hero Section</title>
+    <title>Portfolio Builder - Drag & Drop Editor</title>
     <style>
-        @font-face {
-            font-family: rejoy;
-            src: url(/fonts/Futura-Bold.ttf);
-        }
-
+        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html, body {
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden;
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --bg-dark: #1e1e2e;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --text-light: #f1f5f9;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --glass: rgba(255, 255, 255, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-            background-color: #000;
-            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--bg-light) 0%, #e0e7ff 100%);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            min-height: 100vh;
+            transition: var(--transition);
         }
 
-        /* Header Navigation */
-        header {
-            width: 100%;
-            padding: 1.4rem;
-            background: transparent;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 100;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        nav .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-
-        nav ul {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        nav ul li {
-            font-size: 1.2rem;
-            color: #fff;
-            cursor: pointer;
-            transition: opacity 0.3s;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-
-        nav ul li:hover {
-            opacity: 0.7;
-        }
-
-        nav button {
-            border: none;
-            outline: none;
-            padding: 0.8rem 1.6rem;
-            background-color: #fff;
-            color: #111;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
-        }
-
-        nav button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255,255,255,0.3);
-        }
-
-        /* Hero Container */
+        /* Layout */
         .container {
-            position: relative;
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            grid-template-rows: 60px 1fr;
             height: 100vh;
-            width: 100%;
-            overflow: hidden;
+            gap: 1px;
+            background: var(--border);
+            transition: var(--transition);
+        }
+
+        /* Header */
+        .header {
+            grid-column: 1 / -1;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            color: white;
+            box-shadow: var(--shadow);
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
-        /* Video Background */
-        .container video {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            transform: translate(-50%, -50%);
-            object-fit: cover;
-            z-index: 1;
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
-        /* Overlay for better text visibility */
-        .container::before {
-            content: '';
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: var(--glass);
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #f43f5e);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #f43f5e, var(--accent));
+        }
+
+        /* Sidebar - Elements */
+        .sidebar {
+            background: var(--glass);
+            padding: 1.5rem;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar h3 {
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .element-item {
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: grab;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+        }
+
+        .element-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .element-item:active {
+            cursor: grabbing;
+        }
+
+        .element-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Canvas Area */
+        .canvas-area {
+            background: var(--glass);
+            position: relative;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .canvas {
+            width: 1200px;
+            min-height: 800px;
+            background: white;
+            border-radius: 1rem;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .canvas.drag-over {
+            background: #f0f9ff;
+            border: 2px dashed var(--primary);
+        }
+
+        /* Properties Panel */
+        .properties-panel {
+            background: var(--glass);
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: none;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .properties-panel.active {
+            display: block;
+        }
+
+        .property-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .property-group h4 {
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-dark);
+        }
+
+        .property-item {
+            margin-bottom: 0.75rem;
+        }
+
+        .property-item label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .property-item input,
+        .property-item select,
+        .property-item textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .property-item input:focus,
+        .property-item select:focus,
+        .property-item textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Draggable Elements */
+        .draggable-element {
             position: absolute;
-            top: 0;
-            left: 0;
+            cursor: move;
+            border: 2px solid transparent;
+            transition: var(--transition);
+            user-select: none;
+        }
+
+        .draggable-element:hover {
+            border-color: var(--primary);
+        }
+
+        .draggable-element.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .draggable-element.dragging {
+            opacity: 0.7;
+            cursor: grabbing;
+        }
+
+        .resize-handle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            border: 2px solid white;
+            border-radius: 50%;
+            display: none;
+        }
+
+        .draggable-element.selected .resize-handle {
+            display: block;
+        }
+
+        .resize-handle.nw { top: -5px; left: -5px; cursor: nw-resize; }
+        .resize-handle.ne { top: -5px; right: -5px; cursor: ne-resize; }
+        .resize-handle.sw { bottom: -5px; left: -5px; cursor: sw-resize; }
+        .resize-handle.se { bottom: -5px; right: -5px; cursor: se-resize; }
+
+        /* Element Specific Styles */
+        .element-text {
+            padding: 0.5rem;
+            min-width: 100px;
+            min-height: 30px;
+        }
+
+        .element-heading {
+            font-size: 2rem;
+            font-weight: 700;
+            padding: 0.5rem;
+            min-width: 200px;
+        }
+
+        .element-image {
+            width: 200px;
+            height: 150px;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .element-image img {
             width: 100%;
             height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(0, 0, 0, 0.3) 0%,
-                rgba(0, 0, 0, 0.1) 50%,
-                rgba(0, 0, 0, 0.4) 100%
-            );
-            z-index: 2;
+            object-fit: cover;
+        }
+
+        .element-button {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .element-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .element-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            width: 300px;
+            border: 1px solid var(--border);
+        }
+
+        .element-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .element-card p {
+            color: #64748b;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .element-social {
+            display: flex;
+            gap: 1rem;
+            padding: 0.5rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-2px);
+            background: var(--primary-dark);
+        }
+
+        .element-form {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+            width: 400px;
+            border: 1px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Grid Lines */
+        .grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .grid-lines.visible {
+            opacity: 1;
+        }
+
+        .grid-line {
+            position: absolute;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .grid-line.horizontal {
+            width: 100%;
+            height: 1px;
+        }
+
+        .grid-line.vertical {
+            width: 1px;
+            height: 100%;
+        }
+
+        /* Snap Lines */
+        .snap-line {
+            position: absolute;
+            background: var(--primary);
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 1000;
             pointer-events: none;
         }
 
-        /* Item Box */
-        .container .items {
-            position: relative;
-            z-index: 3;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        .snap-line.horizontal {
+            width: 100%;
+            height: 1px;
+        }
+
+        .snap-line.vertical {
+            width: 1px;
+            height: 100%;
+        }
+
+        .snap-line.visible {
+            opacity: 1;
+        }
+
+        /* Templates Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
             align-items: center;
-            width: 90vw;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--glass);
+            border-radius: 1rem;
             padding: 2rem;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow-lg);
+            animation: modalAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalAppear {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--text-dark);
+            transform: rotate(90deg);
+        }
+
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .template-item {
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
             text-align: center;
         }
 
-        /* Transparent Text with Stroke */
-        .container .items h1 {
-            font-size: clamp(4rem, 8vw, 10rem);
-            font-weight: 900;
-            font-family: rejoy, 'Arial Black', sans-serif;
-            text-transform: uppercase;
-            line-height: 1.1;
-            letter-spacing: 0.02em;
+        .template-item:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .template-preview {
+            width: 100%;
+            height: 150px;
+            background: #f8fafc;
+            border-radius: 0.375rem;
             margin-bottom: 0.5rem;
-            
-            /* Transparent text with video showing through */
-            color: transparent;
-            -webkit-text-stroke: 2px rgba(255, 255, 255, 0.8);
-            text-stroke: 2px rgba(255, 255, 255, 0.8);
-            
-            /* Clip the background video to text */
-            background: inherit;
-            -webkit-background-clip: text;
-            background-clip: text;
-            
-            /* Animation */
-            animation: fadeInUp 1s ease-out;
-            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
         }
 
-        /* Enhanced glow effect on hover */
-        .container .items h1:hover {
-            -webkit-text-stroke: 3px rgba(255, 255, 255, 1);
-            text-stroke: 3px rgba(255, 255, 255, 1);
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
-            transition: all 0.3s ease;
-        }
-
-        /* Subtitle or tagline */
-        .container .items .subtitle {
-            font-size: clamp(1rem, 2vw, 1.5rem);
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 300;
-            letter-spacing: 0.3em;
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-            animation: fadeInUp 1s ease-out 0.3s backwards;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
-        }
-
-        /* CTA Button */
-        .container .items .cta-button {
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            outline: none;
-            background-color: transparent;
-            color: #fff;
-            padding: 1rem 3rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            animation: fadeInUp 1s ease-out 0.6s backwards;
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--glass);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 3000;
             backdrop-filter: blur(10px);
-            text-transform: uppercase;
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .container .items .cta-button:hover {
-            background-color: rgba(255, 255, 255, 1);
-            color: #000;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.3);
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
         }
 
-        /* Scroll Indicator */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 4;
-            animation: bounce 2s infinite;
-        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 60px auto 1fr;
+            }
 
-        .scroll-indicator::before {
-            content: '';
-            display: block;
-            width: 30px;
-            height: 50px;
-            border: 2px solid rgba(255, 255, 255, 0.6);
-            border-radius: 25px;
-            position: relative;
-        }
+            .sidebar {
+                grid-row: 2;
+                display: none;
+            }
 
-        .scroll-indicator::after {
-            content: '';
-            display: block;
-            width: 6px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 3px;
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: scroll 2s infinite;
+            .properties-panel {
+                display: none;
+            }
+
+            .canvas {
+                width: 100%;
+                min-height: 600px;
+            }
         }
 
         /* Animations */
-        @keyframes fadeInUp {
+        @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(40px);
+                transform: translateY(10px);
             }
             to {
                 opacity: 1;
@@ -260,124 +618,1838 @@
             }
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateX(-50%) translateY(0);
+        .animate-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #0f172a 100%);
+            color: var(--text-light);
+        }
+
+        body.dark-mode .canvas {
+            background: #1e293b;
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .element-card,
+        body.dark-mode .element-form {
+            background: #1e293b;
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .sidebar,
+        body.dark-mode .properties-panel,
+        body.dark-mode .modal-content {
+            background: rgba(30, 41, 59, 0.7);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .element-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .property-item input,
+        body.dark-mode .property-item select,
+        body.dark-mode .property-item textarea {
+            background: rgba(15, 23, 42, 0.5);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">Portfolio Builder</div>
+            <div class="header-actions">
+                <button class="btn" onclick="toggleGrid()">
+                    <span id="grid-toggle-text">Show Grid</span>
+                </button>
+                <button class="btn" onclick="showTemplates()">Templates</button>
+                <button class="btn" onclick="generateLayout()">AI Layout</button>
+                <button class="btn" onclick="undo()">Undo</button>
+                <button class="btn" onclick="redo()">Redo</button>
+                <button class="btn" onclick="clearCanvas()">Clear</button>
+                <button class="btn" onclick="saveToLocalStorage()">Save</button>
+                <button class="btn btn-primary" onclick="downloadPortfolio()">Download</button>
+                <button class="btn" onclick="toggleDarkMode()">🌙</button>
+            </div>
+        </header>
+
+        <!-- Sidebar - Elements -->
+        <aside class="sidebar">
+            <h3>Elements</h3>
+            <div class="element-item" draggable="true" data-element-type="heading">
+                <div class="element-icon">H</div>
+                <span>Heading</span>
+            </div>
+            <div class="element-item" draggable="true" data-element-type="text">
+                <div class="element-icon">T</div>
+                <span>Text</span>
+            </div>
+            <div class="element-item" draggable="true" data-element-type="image">
+                <div class="element-icon">I</div>
+                <span>Image</span>
+            </div>
+            <div class="element-item" draggable="true" data-element-type="button">
+                <div class="element-icon">B</div>
+                <span>Button</span>
+            </div>
+            <div class="element-item" draggable="true" data-element-type="card">
+                <div class="element-icon">C</div>
+                <span>Project Card</span>
+            </div>
+            <div class="element-item" draggable="true" data-element-type="social">
+                <div class="element-icon">S</div>
+                <span>Social Icons</span>
+            </div>
+            <div class="element-item" draggable="true" data-element-type="form">
+                <div class="element-icon">F</div>
+                <span>Contact Form</span>
+            </div>
+            
+            <h3 style="margin-top: 2rem;">Quick Actions</h3>
+            <button class="btn" style="width: 100%; margin-bottom: 0.5rem;" onclick="alignSelected('left')">Align Left</button>
+            <button class="btn" style="width: 100%; margin-bottom: 0.5rem;" onclick="alignSelected('center')">Align Center</button>
+            <button class="btn" style="width: 100%; margin-bottom: 0.5rem;" onclick="alignSelected('right')">Align Right</button>
+            <button class="btn" style="width: 100%; margin-bottom: 0.5rem;" onclick="duplicateSelected()">Duplicate</button>
+            <button class="btn" style="width: 100%; margin-bottom: 0.5rem;" onclick="deleteSelected()">Delete</button>
+            
+            <h3 style="margin-top: 2rem;">Color Palette</h3>
+            <div class="property-item">
+                <input type="color" id="primary-color" value="#6366f1" onchange="updatePalette()">
+                <label for="primary-color">Primary Color</label>
+            </div>
+            <div id="color-palette" style="display: flex; gap: 0.5rem; margin-top: 0.5rem;"></div>
+        </aside>
+
+        <!-- Canvas Area -->
+        <main class="canvas-area">
+            <div class="canvas" id="canvas">
+                <div class="grid-lines" id="grid-lines"></div>
+                <div class="snap-line horizontal" id="snap-h"></div>
+                <div class="snap-line vertical" id="snap-v"></div>
+            </div>
+        </main>
+
+        <!-- Properties Panel -->
+        <aside class="properties-panel" id="properties-panel">
+            <div id="properties-content">
+                <p style="color: #64748b; text-align: center; margin-top: 2rem;">Select an element to edit properties</p>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Templates Modal -->
+    <div class="modal" id="templates-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Choose a Template</h2>
+                <button class="modal-close" onclick="closeTemplates()">&times;</button>
+            </div>
+            <div class="template-grid">
+                <div class="template-item" onclick="loadTemplate('minimal')">
+                    <div class="template-preview">📄</div>
+                    <h3>Minimal</h3>
+                    <p>Clean and simple</p>
+                </div>
+                <div class="template-item" onclick="loadTemplate('modern')">
+                    <div class="template-preview">🎨</div>
+                    <h3>Modern</h3>
+                    <p>Contemporary design</p>
+                </div>
+                <div class="template-item" onclick="loadTemplate('dark')">
+                    <div class="template-preview">🌙</div>
+                    <h3>Dark Mode</h3>
+                    <p>Sleek dark theme</p>
+                </div>
+                <div class="template-item" onclick="loadTemplate('creative')">
+                    <div class="template-preview">🎭</div>
+                    <h3>Creative</h3>
+                    <p>Artistic layout</p>
+                </div>
+                <div class="template-item" onclick="loadTemplate('professional')">
+                    <div class="template-preview">💼</div>
+                    <h3>Professional</h3>
+                    <p>Business focused</p>
+                </div>
+                <div class="template-item" onclick="loadTemplate('portfolio')">
+                    <div class="template-preview">💎</div>
+                    <h3>Portfolio</h3>
+                    <p>Highlight your work</p>
+                </div>
+                <div class="template-item" onclick="loadTemplate('startup')">
+                    <div class="template-preview">🚀</div>
+                    <h3>Startup</h3>
+                    <p>Product showcase</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Global State
+        let selectedElement = null;
+        let draggedElement = null;
+        let elementIdCounter = 0;
+        let history = [];
+        let historyIndex = -1;
+        let isResizing = false;
+        let resizeHandle = null;
+        let gridSize = 20;
+        let showGrid = false;
+        let copiedElement = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeGrid();
+            initializeDragAndDrop();
+            initializeKeyboardShortcuts();
+            loadFromLocalStorage();
+            generateColorPalette();
+        });
+
+        // Initialize Grid
+        function initializeGrid() {
+            const gridLines = document.getElementById('grid-lines');
+            const canvas = document.getElementById('canvas');
+            
+            // Create horizontal lines
+            for (let i = 0; i <= 800; i += gridSize) {
+                const line = document.createElement('div');
+                line.className = 'grid-line horizontal';
+                line.style.top = i + 'px';
+                gridLines.appendChild(line);
             }
-            40% {
-                transform: translateX(-50%) translateY(-10px);
-            }
-            60% {
-                transform: translateX(-50%) translateY(-5px);
+            
+            // Create vertical lines
+            for (let i = 0; i <= 1200; i += gridSize) {
+                const line = document.createElement('div');
+                line.className = 'grid-line vertical';
+                line.style.left = i + 'px';
+                gridLines.appendChild(line);
             }
         }
 
-        @keyframes scroll {
-            0% {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-            100% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(20px);
+        // Toggle Grid
+        function toggleGrid() {
+            showGrid = !showGrid;
+            const gridLines = document.getElementById('grid-lines');
+            const toggleText = document.getElementById('grid-toggle-text');
+            
+            if (showGrid) {
+                gridLines.classList.add('visible');
+                toggleText.textContent = 'Hide Grid';
+            } else {
+                gridLines.classList.remove('visible');
+                toggleText.textContent = 'Show Grid';
             }
         }
 
-        /* Responsive */
+        // Initialize Drag and Drop
+        function initializeDragAndDrop() {
+            const canvas = document.getElementById('canvas');
+            const elementItems = document.querySelectorAll('.element-item');
+            
+            // Drag from sidebar
+            elementItems.forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+            });
+            
+            // Drop on canvas
+            canvas.addEventListener('dragover', handleDragOver);
+            canvas.addEventListener('drop', handleDrop);
+            canvas.addEventListener('dragleave', handleDragLeave);
+            
+            // Canvas element interactions
+            canvas.addEventListener('click', handleCanvasClick);
+            canvas.addEventListener('mousedown', handleMouseDown);
+            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mouseup', handleMouseUp);
+            
+            // Prevent default drag behavior
+            canvas.addEventListener('dragover', e => e.preventDefault());
+        }
+
+        // Drag Start
+        function handleDragStart(e) {
+            e.dataTransfer.effectAllowed = 'copy';
+            e.dataTransfer.setData('element-type', this.dataset.elementType);
+            this.style.opacity = '0.5';
+        }
+
+        // Drag End
+        function handleDragEnd(e) {
+            this.style.opacity = '1';
+        }
+
+        // Drag Over
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+            this.classList.add('drag-over');
+        }
+
+        // Drag Leave
+        function handleDragLeave(e) {
+            if (e.target === this) {
+                this.classList.remove('drag-over');
+            }
+        }
+
+        // Drop
+        function handleDrop(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            
+            const elementType = e.dataTransfer.getData('element-type');
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            createElement(elementType, x, y);
+        }
+
+        // Create Element
+        function createElement(type, x, y, properties = {}) {
+            const element = document.createElement('div');
+            element.className = 'draggable-element animate-in';
+            element.dataset.elementId = 'element-' + (++elementIdCounter);
+            element.dataset.elementType = type;
+            
+            // Apply snapped position
+            const snappedX = Math.round(x / gridSize) * gridSize;
+            const snappedY = Math.round(y / gridSize) * gridSize;
+            
+            element.style.left = snappedX + 'px';
+            element.style.top = snappedY + 'px';
+            
+            // Create element based on type
+            switch(type) {
+                case 'heading':
+                    element.innerHTML = `
+                        <h1 contenteditable="true">Your Heading</h1>
+                        <div class="resize-handle nw"></div>
+                        <div class="resize-handle ne"></div>
+                        <div class="resize-handle sw"></div>
+                        <div class="resize-handle se"></div>
+                    `;
+                    element.classList.add('element-heading');
+                    break;
+                    
+                case 'text':
+                    element.innerHTML = `
+                        <p contenteditable="true">Click to edit this text. You can style it using the properties panel.</p>
+                        <div class="resize-handle nw"></div>
+                        <div class="resize-handle ne"></div>
+                        <div class="resize-handle sw"></div>
+                        <div class="resize-handle se"></div>
+                    `;
+                    element.classList.add('element-text');
+                    break;
+                    
+                case 'image':
+                    element.innerHTML = `
+                        <div class="element-image">
+                            <input type="file" accept="image/*" style="display: none;" onchange="handleImageUpload(this)">
+                            <button onclick="this.previousElementSibling.click()" style="background: none; border: none; color: #64748b; cursor: pointer;">
+                                Click to add image
+                            </button>
+                        </div>
+                        <div class="resize-handle nw"></div>
+                        <div class="resize-handle ne"></div>
+                        <div class="resize-handle sw"></div>
+                        <div class="resize-handle se"></div>
+                    `;
+                    element.classList.add('element-image');
+                    element.style.width = '200px';
+                    break;
+                    
+                case 'button':
+                    element.innerHTML = `
+                        <button class="element-button" contenteditable="true">Click Me</button>
+                        <div class="resize-handle nw"></div>
+                        <div class="resize-handle ne"></div>
+                        <div class="resize-handle sw"></div>
+                        <div class="resize-handle se"></div>
+                    `;
+                    element.classList.add('element-button-container');
+                    break;
+                    
+                case 'card':
+                    element.innerHTML = `
+                        <div class="element-card">
+                            <h3 contenteditable="true">Project Title</h3>
+                            <p contenteditable="true">Description of your project goes here. Highlight the key features and technologies used.</p>
+                            <button class="element-button" style="margin-top: 1rem;">View Project</button>
+                        </div>
+                        <div class="resize-handle nw"></div>
+                        <div class="resize-handle ne"></div>
+                        <div class="resize-handle sw"></div>
+                        <div class="resize-handle se"></div>
+                    `;
+                    element.classList.add('element-card-container');
+                    break;
+                    
+                case 'social':
+                    element.innerHTML = `
+                        <div class="element-social">
+                            <div class="social-icon" contenteditable="true">f</div>
+                            <div class="social-icon" contenteditable="true">t</div>
+                            <div class="social-icon" contenteditable="true">in</div>
+                            <div class="social-icon" contenteditable="true">ig</div>
+                        </div>
+                        <div class="resize-handle nw"></div>
+                        <div class="resize-handle ne"></div>
+                        <div class="resize-handle sw"></div>
+                        <div class="resize-handle se"></div>
+                    `;
+                    element.classList.add('element-social-container');
+                    break;
+                    
+                case 'form':
+                    element.innerHTML = `
+                        <form class="element-form">
+                            <h3 contenteditable="true">Get In Touch</h3>
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" placeholder="Your Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" placeholder="your@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Message</label>
+                                <textarea rows="4" placeholder="Your message..."></textarea>
+                            </div>
+                            <button type="submit" class="element-button">Send Message</button>
+                        </form>
+                        <div class="resize-handle nw"></div>
+                        <div class="resize-handle ne"></div>
+                        <div class="resize-handle sw"></div>
+                        <div class="resize-handle se"></div>
+                    `;
+                    element.classList.add('element-form-container');
+                    break;
+            }
+            
+            // Apply saved properties
+            if (properties.style) {
+                Object.assign(element.style, properties.style);
+            }
+            if (properties.content) {
+                element.innerHTML = properties.content + element.querySelectorAll('.resize-handle').outerHTML;
+            }
+            
+            document.getElementById('canvas').appendChild(element);
+            
+            // Make it draggable within canvas
+            makeElementDraggable(element);
+            
+            // Save to history
+            saveState();
+            
+            // Select the element
+            selectElement(element);
+            
+            // Show success toast
+            showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} added to canvas`);
+        }
+
+        // Make Element Draggable
+        function makeElementDraggable(element) {
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
+            
+            element.addEventListener('mousedown', function(e) {
+                if (e.target.classList.contains('resize-handle')) return;
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                initialX = parseInt(element.style.left) || 0;
+                initialY = parseInt(element.style.top) || 0;
+                
+                element.classList.add('dragging');
+                e.preventDefault();
+            });
+            
+            window.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                
+                let newX = initialX + deltaX;
+                let newY = initialY + deltaY;
+                
+                // Snap to grid
+                if (showGrid) {
+                    newX = Math.round(newX / gridSize) * gridSize;
+                    newY = Math.round(newY / gridSize) * gridSize;
+                }
+                
+                // Show snap lines
+                showSnapLines(newX, newY, element.offsetWidth, element.offsetHeight);
+                
+                element.style.left = newX + 'px';
+                element.style.top = newY + 'px';
+            });
+            
+            window.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    element.classList.remove('dragging');
+                    hideSnapLines();
+                    saveState();
+                }
+            });
+        }
+
+        // Show Snap Lines
+        function showSnapLines(x, y, width, height) {
+            const snapH = document.getElementById('snap-h');
+            const snapV = document.getElementById('snap-v');
+            const elements = document.querySelectorAll('.draggable-element:not(.dragging)');
+            
+            let snapY = null;
+            let snapX = null;
+            
+            elements.forEach(el => {
+                const elX = parseInt(el.style.left);
+                const elY = parseInt(el.style.top);
+                const elW = el.offsetWidth;
+                const elH = el.offsetHeight;
+                
+                // Snap to top/bottom
+                if (Math.abs(y - elY) < 5) snapY = elY;
+                if (Math.abs(y + height - elY) < 5) snapY = elY;
+                if (Math.abs(y - (elY + elH)) < 5) snapY = elY + elH;
+                if (Math.abs(y + height - (elY + elH)) < 5) snapY = elY + elH;
+                
+                // Snap to left/right
+                if (Math.abs(x - elX) < 5) snapX = elX;
+                if (Math.abs(x + width - elX) < 5) snapX = elX;
+                if (Math.abs(x - (elX + elW)) < 5) snapX = elX + elW;
+                if (Math.abs(x + width - (elX + elW)) < 5) snapX = elX + elW;
+            });
+            
+            if (snapY !== null) {
+                snapH.style.top = snapY + 'px';
+                snapH.classList.add('visible');
+            } else {
+                snapH.classList.remove('visible');
+            }
+            
+            if (snapX !== null) {
+                snapV.style.left = snapX + 'px';
+                snapV.classList.add('visible');
+            } else {
+                snapV.classList.remove('visible');
+            }
+        }
+
+        // Hide Snap Lines
+        function hideSnapLines() {
+            document.getElementById('snap-h').classList.remove('visible');
+            document.getElementById('snap-v').classList.remove('visible');
+        }
+
+        // Handle Canvas Click
+        function handleCanvasClick(e) {
+            if (e.target === e.currentTarget) {
+                deselectAll();
+            }
+        }
+
+        // Handle Mouse Down
+        function handleMouseDown(e) {
+            if (e.target.classList.contains('resize-handle')) {
+                isResizing = true;
+                resizeHandle = e.target;
+                startResize(e);
+            } else if (e.target.closest('.draggable-element')) {
+                selectElement(e.target.closest('.draggable-element'));
+            }
+        }
+
+        // Handle Mouse Move
+        function handleMouseMove(e) {
+            if (isResizing) {
+                handleResize(e);
+            }
+        }
+
+        // Handle Mouse Up
+        function handleMouseUp(e) {
+            if (isResizing) {
+                isResizing = false;
+                resizeHandle = null;
+                saveState();
+            }
+        }
+
+        // Start Resize
+        function startResize(e) {
+            const element = resizeHandle.closest('.draggable-element');
+            const startX = e.clientX;
+            const startY = e.clientY;
+            const startWidth = element.offsetWidth;
+            const startHeight = element.offsetHeight;
+            const startLeft = parseInt(element.style.left);
+            const startTop = parseInt(element.style.top);
+            
+            function handleResize(e) {
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                
+                let newWidth = startWidth;
+                let newHeight = startHeight;
+                let newLeft = startLeft;
+                let newTop = startTop;
+                
+                if (resizeHandle.classList.contains('se')) {
+                    newWidth = startWidth + deltaX;
+                    newHeight = startHeight + deltaY;
+                } else if (resizeHandle.classList.contains('sw')) {
+                    newWidth = startWidth - deltaX;
+                    newHeight = startHeight + deltaY;
+                    newLeft = startLeft + deltaX;
+                } else if (resizeHandle.classList.contains('ne')) {
+                    newWidth = startWidth + deltaX;
+                    newHeight = startHeight - deltaY;
+                    newTop = startTop + deltaY;
+                } else if (resizeHandle.classList.contains('nw')) {
+                    newWidth = startWidth - deltaX;
+                    newHeight = startHeight - deltaY;
+                    newLeft = startLeft + deltaX;
+                    newTop = startTop + deltaY;
+                }
+                
+                // Apply minimum dimensions
+                newWidth = Math.max(50, newWidth);
+                newHeight = Math.max(30, newHeight);
+                
+                // Snap to grid
+                if (showGrid) {
+                    newWidth = Math.round(newWidth / gridSize) * gridSize;
+                    newHeight = Math.round(newHeight / gridSize) * gridSize;
+                    newLeft = Math.round(newLeft / gridSize) * gridSize;
+                    newTop = Math.round(newTop / gridSize) * gridSize;
+                }
+                
+                element.style.width = newWidth + 'px';
+                element.style.height = newHeight + 'px';
+                element.style.left = newLeft + 'px';
+                element.style.top = newTop + 'px';
+            }
+            
+            window.addEventListener('mousemove', handleResize);
+            window.addEventListener('mouseup', function() {
+                window.removeEventListener('mousemove', handleResize);
+            }, { once: true });
+        }
+
+        // Select Element
+        function selectElement(element) {
+            deselectAll();
+            selectedElement = element;
+            element.classList.add('selected');
+            showProperties(element);
+        }
+
+        // Deselect All
+        function deselectAll() {
+            document.querySelectorAll('.draggable-element').forEach(el => {
+                el.classList.remove('selected');
+            });
+            selectedElement = null;
+            hideProperties();
+        }
+
+        // Delete Selected
+        function deleteSelected() {
+            if (selectedElement) {
+                selectedElement.remove();
+                selectedElement = null;
+                hideProperties();
+                saveState();
+                showToast('Element deleted');
+            }
+        }
+
+        // Duplicate Selected
+        function duplicateSelected() {
+            if (selectedElement) {
+                const rect = selectedElement.getBoundingClientRect();
+                const canvasRect = document.getElementById('canvas').getBoundingClientRect();
+                const x = parseInt(selectedElement.style.left) + 20;
+                const y = parseInt(selectedElement.style.top) + 20;
+                
+                createElement(selectedElement.dataset.elementType, x, y, {
+                    style: selectedElement.style.cssText,
+                    content: selectedElement.innerHTML.replace(/<div class="resize-handle[^>]*><\/div>/g, '')
+                });
+            }
+        }
+
+        // Align Selected
+        function alignSelected(alignment) {
+            if (selectedElement) {
+                const canvas = document.getElementById('canvas');
+                const canvasWidth = canvas.offsetWidth;
+                const elementWidth = selectedElement.offsetWidth;
+                
+                let newX = parseInt(selectedElement.style.left);
+                
+                switch(alignment) {
+                    case 'left':
+                        newX = 0;
+                        break;
+                    case 'center':
+                        newX = (canvasWidth - elementWidth) / 2;
+                        break;
+                    case 'right':
+                        newX = canvasWidth - elementWidth;
+                        break;
+                }
+                
+                selectedElement.style.left = newX + 'px';
+                saveState();
+                showToast(`Aligned ${alignment}`);
+            }
+        }
+
+        // Show Properties
+        function showProperties(element) {
+            const panel = document.getElementById('properties-panel');
+            const content = document.getElementById('properties-content');
+            panel.classList.add('active');
+            
+            const type = element.dataset.elementType;
+            let html = `<h3>Properties</h3>`;
+            
+            // Common properties
+            html += `
+                <div class="property-group">
+                    <h4>Position & Size</h4>
+                    <div class="property-item">
+                        <label>X Position</label>
+                        <input type="number" value="${parseInt(element.style.left) || 0}" 
+                               onchange="updateElementStyle('left', this.value + 'px')">
+                    </div>
+                    <div class="property-item">
+                        <label>Y Position</label>
+                        <input type="number" value="${parseInt(element.style.top) || 0}" 
+                               onchange="updateElementStyle('top', this.value + 'px')">
+                    </div>
+                    <div class="property-item">
+                        <label>Width</label>
+                        <input type="number" value="${element.offsetWidth}" 
+                               onchange="updateElementStyle('width', this.value + 'px')">
+                    </div>
+                    <div class="property-item">
+                        <label>Height</label>
+                        <input type="number" value="${element.offsetHeight}" 
+                               onchange="updateElementStyle('height', this.value + 'px')">
+                    </div>
+                </div>
+                
+                <div class="property-group">
+                    <h4>Appearance</h4>
+                    <div class="property-item">
+                        <label>Background Color</label>
+                        <input type="color" value="${rgbToHex(element.style.backgroundColor) || '#ffffff'}" 
+                               onchange="updateElementStyle('backgroundColor', this.value)">
+                    </div>
+                    <div class="property-item">
+                        <label>Border Radius</label>
+                        <input type="range" min="0" max="50" value="${parseInt(element.style.borderRadius) || 0}" 
+                               onchange="updateElementStyle('borderRadius', this.value + 'px')">
+                    </div>
+                    <div class="property-item">
+                        <label>Shadow</label>
+                        <select onchange="updateElementStyle('boxShadow', this.value)">
+                            <option value="none">None</option>
+                            <option value="0 4px 6px -1px rgba(0, 0, 0, 0.1)">Small</option>
+                            <option value="0 20px 25px -5px rgba(0, 0, 0, 0.1)">Large</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            
+            // Type-specific properties
+            switch(type) {
+                case 'heading':
+                case 'text':
+                    html += `
+                        <div class="property-group">
+                            <h4>Typography</h4>
+                            <div class="property-item">
+                                <label>Font Size</label>
+                                <input type="range" min="12" max="72" value="${parseInt(getComputedStyle(element.querySelector(type === 'heading' ? 'h1' : 'p')).fontSize)}" 
+                                       onchange="updateElementStyle('fontSize', this.value + 'px', '${type === 'heading' ? 'h1' : 'p'}')">
+                            </div>
+                            <div class="property-item">
+                                <label>Font Weight</label>
+                                <select onchange="updateElementStyle('fontWeight', this.value, '${type === 'heading' ? 'h1' : 'p'}')">
+                                    <option value="400">Regular</option>
+                                    <option value="500">Medium</option>
+                                    <option value="600">Semibold</option>
+                                    <option value="700">Bold</option>
+                                </select>
+                            </div>
+                            <div class="property-item">
+                                <label>Text Color</label>
+                                <input type="color" value="${rgbToHex(getComputedStyle(element.querySelector(type === 'heading' ? 'h1' : 'p')).color)}" 
+                                       onchange="updateElementStyle('color', this.value, '${type === 'heading' ? 'h1' : 'p'}')">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'button':
+                    html += `
+                        <div class="property-group">
+                            <h4>Button Style</h4>
+                            <div class="property-item">
+                                <label>Button Color</label>
+                                <input type="color" value="${rgbToHex(element.querySelector('.element-button').style.backgroundColor || getComputedStyle(element.querySelector('.element-button')).backgroundColor)}" 
+                                       onchange="updateElementStyle('backgroundColor', this.value, '.element-button')">
+                            </div>
+                            <div class="property-item">
+                                <label>Text Color</label>
+                                <input type="color" value="${rgbToHex(element.querySelector('.element-button').style.color || getComputedStyle(element.querySelector('.element-button')).color)}" 
+                                       onchange="updateElementStyle('color', this.value, '.element-button')">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'card':
+                    html += `
+                        <div class="property-group">
+                            <h4>Card Style</h4>
+                            <div class="property-item">
+                                <label>Card Color</label>
+                                <input type="color" value="${rgbToHex(element.querySelector('.element-card').style.backgroundColor || getComputedStyle(element.querySelector('.element-card')).backgroundColor)}" 
+                                       onchange="updateElementStyle('backgroundColor', this.value, '.element-card')">
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            content.innerHTML = html;
+        }
+
+        // Hide Properties
+        function hideProperties() {
+            document.getElementById('properties-panel').classList.remove('active');
+        }
+
+        // Update Element Style
+        function updateElementStyle(property, value, selector = null) {
+            if (!selectedElement) return;
+            
+            const target = selector ? selectedElement.querySelector(selector) : selectedElement;
+            if (target) {
+                target.style[property] = value;
+                saveState();
+            }
+        }
+
+        // RGB to Hex
+        function rgbToHex(rgb) {
+            if (!rgb || rgb === 'transparent') return '#ffffff';
+            if (rgb.startsWith('#')) return rgb;
+            
+            const result = rgb.match(/\d+/g);
+            if (!result) return '#ffffff';
+            
+            return "#" + result.map(x => {
+                const hex = parseInt(x).toString(16);
+                return hex.length === 1 ? "0" + hex : hex;
+            }).join('');
+        }
+
+        // Handle Image Upload
+        function handleImageUpload(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageContainer = input.parentElement;
+                    imageContainer.innerHTML = `<img src="${e.target.result}" alt="Uploaded image">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Show Templates
+        function showTemplates() {
+            document.getElementById('templates-modal').classList.add('active');
+        }
+
+        // Close Templates
+        function closeTemplates() {
+            document.getElementById('templates-modal').classList.remove('active');
+        }
+
+        // Load Template
+        function loadTemplate(templateName) {
+            clearCanvas();
+            
+            switch(templateName) {
+                case 'minimal':
+                    createElement('heading', 100, 50);
+                    createElement('text', 100, 150);
+                    createElement('text', 100, 200);
+                    createElement('button', 100, 280);
+                    break;
+                    
+                case 'modern':
+                    createElement('heading', 100, 50);
+                    createElement('text', 100, 130);
+                    createElement('card', 100, 200);
+                    createElement('card', 420, 200);
+                    createElement('card', 740, 200);
+                    break;
+                    
+                case 'dark':
+                    createElement('heading', 100, 50);
+                    createElement('text', 100, 130);
+                    createElement('card', 100, 200);
+                    break;
+                    
+                case 'creative':
+                    createElement('heading', 100, 50);
+                    createElement('image', 700, 50);
+                    createElement('text', 100, 150);
+                    createElement('card', 100, 250);
+                    createElement('card', 420, 250);
+                    break;
+                    
+                case 'professional':
+                    createElement('heading', 100, 50);
+                    createElement('text', 100, 130);
+                    createElement('card', 100, 200);
+                    createElement('social', 100, 450);
+                    break;
+                    
+                case 'portfolio':
+                    createElement('heading', 100, 50);
+                    createElement('text', 100, 130);
+                    createElement('image', 700, 50);
+                    createElement('card', 100, 200);
+                    createElement('card', 420, 200);
+                    createElement('card', 740, 200);
+                    break;
+                    
+                case 'startup':
+                    createElement('heading', 100, 50);
+                    createElement('text', 100, 130);
+                    createElement('button', 100, 200);
+                    createElement('image', 700, 50);
+                    createElement('card', 100, 280);
+                    createElement('card', 420, 280);
+                    break;
+            }
+            
+            closeTemplates();
+            showToast(`${templateName.charAt(0).toUpperCase() + templateName.slice(1)} template loaded`);
+        }
+
+        // Generate AI Layout
+        function generateLayout() {
+            showToast('Generating AI layout...');
+            
+            setTimeout(() => {
+                clearCanvas();
+                
+                const layouts = [
+                    // Layout 1: Hero with cards
+                    () => {
+                        createElement('heading', 100, 50);
+                        createElement('text', 100, 130);
+                        createElement('button', 100, 200);
+                        createElement('card', 100, 300);
+                        createElement('card', 420, 300);
+                        createElement('card', 740, 300);
+                    },
+                    
+                    // Layout 2: Split screen
+                    () => {
+                        createElement('heading', 100, 50);
+                        createElement('text', 100, 130);
+                        createElement('image', 700, 50);
+                        createElement('card', 100, 250);
+                        createElement('card', 420, 250);
+                    },
+                    
+                    // Layout 3: Centered
+                    () => {
+                        createElement('heading', 600, 50);
+                        createElement('text', 400, 130);
+                        createElement('button', 600, 200);
+                        createElement('social', 600, 280);
+                    }
+                ];
+                
+                const randomLayout = layouts[Math.floor(Math.random() * layouts.length)];
+                randomLayout();
+                
+                showToast('AI layout generated!');
+            }, 1000);
+        }
+
+        // Color Palette Generator
+        function generateColorPalette() {
+            const primaryColor = document.getElementById('primary-color').value;
+            const palette = document.getElementById('color-palette');
+            palette.innerHTML = '';
+            
+            // Generate complementary colors
+            const colors = generateComplementaryColors(primaryColor);
+            
+            colors.forEach(color => {
+                const colorBox = document.createElement('div');
+                colorBox.style.width = '40px';
+                colorBox.style.height = '40px';
+                colorBox.style.background = color;
+                colorBox.style.borderRadius = '0.5rem';
+                colorBox.style.cursor = 'pointer';
+                colorBox.style.border = '2px solid transparent';
+                colorBox.style.transition = 'all 0.2s';
+                colorBox.onclick = () => applyColor(color);
+                colorBox.onmouseover = () => colorBox.style.borderColor = 'white';
+                colorBox.onmouseout = () => colorBox.style.borderColor = 'transparent';
+                palette.appendChild(colorBox);
+            });
+        }
+
+        // Generate Complementary Colors
+        function generateComplementaryColors(hex) {
+            const colors = [hex];
+            const hsl = hexToHsl(hex);
+            
+            // Complementary
+            colors.push(hslToHex((hsl.h + 180) % 360, hsl.s, hsl.l));
+            
+            // Analogous
+            colors.push(hslToHex((hsl.h + 30) % 360, hsl.s, hsl.l));
+            colors.push(hslToHex((hsl.h - 30 + 360) % 360, hsl.s, hsl.l));
+            
+            // Triadic
+            colors.push(hslToHex((hsl.h + 120) % 360, hsl.s, hsl.l));
+            colors.push(hslToHex((hsl.h + 240) % 360, hsl.s, hsl.l));
+            
+            return colors;
+        }
+
+        // Hex to HSL
+        function hexToHsl(hex) {
+            const r = parseInt(hex.slice(1, 3), 16) / 255;
+            const g = parseInt(hex.slice(3, 5), 16) / 255;
+            const b = parseInt(hex.slice(5, 7), 16) / 255;
+            
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            
+            if (max === min) {
+                h = s = 0;
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            
+            return { h: h * 360, s: s * 100, l: l * 100 };
+        }
+
+        // HSL to Hex
+        function hslToHex(h, s, l) {
+            h /= 360;
+            s /= 100;
+            l /= 100;
+            
+            const hue2rgb = (p, q, t) => {
+                if (t < 0) t += 1;
+                if (t > 1) t -= 1;
+                if (t < 1/6) return p + (q - p) * 6 * t;
+                if (t < 1/2) return q;
+                if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                return p;
+            };
+            
+            let r, g, b;
+            
+            if (s === 0) {
+                r = g = b = l;
+            } else {
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1/3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1/3);
+            }
+            
+            const toHex = x => {
+                const hex = Math.round(x * 255).toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            };
+            
+            return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+        }
+
+        // Apply Color
+        function applyColor(color) {
+            if (selectedElement) {
+                const type = selectedElement.dataset.elementType;
+                if (type === 'heading' || type === 'text') {
+                    updateElementStyle('color', color, type === 'heading' ? 'h1' : 'p');
+                } else if (type === 'button') {
+                    updateElementStyle('backgroundColor', color, '.element-button');
+                } else {
+                    updateElementStyle('backgroundColor', color);
+                }
+                showToast('Color applied');
+            }
+        }
+
+        // Update Palette
+        function updatePalette() {
+            generateColorPalette();
+        }
+
+        // History Management
+        function saveState() {
+            const canvas = document.getElementById('canvas');
+            const state = {
+                elements: Array.from(canvas.querySelectorAll('.draggable-element')).map(el => ({
+                    type: el.dataset.elementType,
+                    id: el.dataset.elementId,
+                    style: el.style.cssText,
+                    content: el.innerHTML.replace(/<div class="resize-handle[^>]*><\/div>/g, '')
+                }))
+            };
+            
+            // Remove future history
+            history = history.slice(0, historyIndex + 1);
+            
+            // Add new state
+            history.push(JSON.stringify(state));
+            historyIndex++;
+            
+            // Limit history size
+            if (history.length > 50) {
+                history.shift();
+                historyIndex--;
+            }
+        }
+
+        // Undo
+        function undo() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                restoreState(JSON.parse(history[historyIndex]));
+                showToast('Undone');
+            }
+        }
+
+        // Redo
+        function redo() {
+            if (historyIndex < history.length - 1) {
+                historyIndex++;
+                restoreState(JSON.parse(history[historyIndex]));
+                showToast('Redone');
+            }
+        }
+
+        // Restore State
+        function restoreState(state) {
+            clearCanvas();
+            state.elements.forEach(el => {
+                const element = createElementFromState(el);
+                document.getElementById('canvas').appendChild(element);
+                makeElementDraggable(element);
+            });
+        }
+
+        // Create Element from State
+        function createElementFromState(state) {
+            const element = document.createElement('div');
+            element.className = 'draggable-element';
+            element.dataset.elementId = state.id;
+            element.dataset.elementType = state.type;
+            element.style.cssText = state.style;
+            
+            // Add content
+            element.innerHTML = state.content;
+            
+            // Add resize handles
+            element.innerHTML += `
+                <div class="resize-handle nw"></div>
+                <div class="resize-handle ne"></div>
+                <div class="resize-handle sw"></div>
+                <div class="resize-handle se"></div>
+            `;
+            
+            return element;
+        }
+
+        // Clear Canvas
+        function clearCanvas() {
+            const canvas = document.getElementById('canvas');
+            canvas.querySelectorAll('.draggable-element').forEach(el => el.remove());
+            saveState();
+            showToast('Canvas cleared');
+        }
+
+        // Save to LocalStorage
+        function saveToLocalStorage() {
+            const state = {
+                elements: Array.from(document.querySelectorAll('.draggable-element')).map(el => ({
+                    type: el.dataset.elementType,
+                    id: el.dataset.elementId,
+                    style: el.style.cssText,
+                    content: el.innerHTML.replace(/<div class="resize-handle[^>]*><\/div>/g, '')
+                })),
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('portfolio-builder-state', JSON.stringify(state));
+            showToast('Portfolio saved to local storage');
+        }
+
+        // Load from LocalStorage
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('portfolio-builder-state');
+            if (saved) {
+                try {
+                    const state = JSON.parse(saved);
+                    restoreState(state);
+                    showToast('Previous portfolio loaded');
+                } catch (e) {
+                    console.error('Failed to load saved state:', e);
+                }
+            } else {
+                // Show welcome message
+                setTimeout(() => {
+                    showToast('Welcome! Drag elements to start building your portfolio');
+                }, 1000);
+            }
+        }
+
+        // Download Portfolio
+        function downloadPortfolio() {
+            const canvas = document.getElementById('canvas');
+            const elements = canvas.querySelectorAll('.draggable-element');
+            
+            // Generate HTML
+            let html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .portfolio-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 800px;
+        }
+        
+        .portfolio-element {
+            position: absolute;
+            transition: transform 0.2s;
+        }
+        
+        .portfolio-element:hover {
+            transform: translateY(-2px);
+        }
+        
+        .element-heading {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .element-text {
+            line-height: 1.6;
+            color: #64748b;
+        }
+        
+        .element-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+        
+        .element-button {
+            padding: 0.75rem 1.5rem;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .element-button:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+        }
+        
+        .element-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .element-card h3 {
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+        
+        .element-card p {
+            color: #64748b;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        
+        .element-social {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: #6366f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-2px);
+            background: #4f46e5;
+        }
+        
+        .element-form {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .element-form h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+            color: #1e293b;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .form-group button {
+            width: 100%;
+        }
+        
         @media (max-width: 768px) {
-            nav ul {
-                display: none;
-            }
-
-            .container .items h1 {
-                -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.9);
-                text-stroke: 1.5px rgba(255, 255, 255, 0.9);
-            }
-
-            .container .items .subtitle {
-                letter-spacing: 0.2em;
-            }
-
-            .container .items .cta-button {
-                padding: 0.8rem 2rem;
-                font-size: 1rem;
-            }
-        }
-
-        /* Additional styling for text clarity */
-        @supports (background-clip: text) or (-webkit-background-clip: text) {
-            .container .items h1 {
-                /* Create a layered effect */
-                text-shadow: 
-                    0 0 1px rgba(0, 0, 0, 0.5),
-                    0 3px 8px rgba(0, 0, 0, 0.3);
+            .portfolio-element {
+                width: 100% !important;
+                left: 0 !important;
+                margin-bottom: 1rem;
+                position: relative;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">TeamSite</div>
-            <ul>
-                <li>Home</li>
-                <li>About</li>
-                <li>Team</li>
-                <li>Projects</li>
-                <li>Services</li>
-            </ul>
-            <button>Get Started</button>
-        </nav>
-    </header>
+    <div class="portfolio-container">
+`;
+            
+            // Add elements
+            elements.forEach(el => {
+                const type = el.dataset.elementType;
+                const style = el.style.cssText;
+                const content = el.innerHTML.replace(/<div class="resize-handle[^>]*><\/div>/g, '');
+                
+                html += `<div class="portfolio-element" data-element-type="${type}" style="${style}">
+${content}
+</div>
+`;
+            });
+            
+            html += `</div>
+</body>
+</html>`;
+            
+            // Download file
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'my-portfolio.html';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showToast('Portfolio downloaded successfully!');
+        }
 
-    <main>
-        <div class="container">
-            <!-- Background Video -->
-            <video playsinline muted loop autoplay>
-                <source src="image/3888252-uhd_4096_2160_25fps.mp4" type="video/mp4">
-                <!-- Fallback to a demo video if yours doesn't load -->
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-fashion-model-walking-in-studio-41465-large.mp4" type="video/mp4">
-            </video>
+        // Toggle Dark Mode
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            showToast(document.body.classList.contains('dark-mode') ? 'Dark mode enabled' : 'Light mode enabled');
+        }
 
-            <!-- Content Box -->
-            <div class="items">
-                <h1>Crafted for those</h1>
-                <h1>who stand apart</h1>
-                <p class="subtitle">Exclusive Collection 2025</p>
-                <button class="cta-button">Explore Now</button>
-            </div>
+        // Show Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
 
-            <!-- Scroll Indicator -->
-            <div class="scroll-indicator"></div>
-        </div>
-    </main>
-
-    <script>
-        // Optional: Add parallax effect to video on scroll
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const video = document.querySelector('.container video');
-            if (video) {
-                video.style.transform = `translate(-50%, calc(-50% + ${scrolled * 0.5}px))`;
-            }
-        });
-
-        // Optional: Pause video when not in viewport (performance)
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                const video = entry.target;
-                if (entry.isIntersecting) {
-                    video.play();
-                } else {
-                    video.pause();
+        // Initialize Keyboard Shortcuts
+        function initializeKeyboardShortcuts() {
+            document.addEventListener('keydown', function(e) {
+                // Copy
+                if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+                    if (selectedElement) {
+                        copiedElement = {
+                            type: selectedElement.dataset.elementType,
+                            style: selectedElement.style.cssText,
+                            content: selectedElement.innerHTML.replace(/<div class="resize-handle[^>]*><\/div>/g, '')
+                        };
+                        showToast('Element copied');
+                    }
+                }
+                
+                // Paste
+                if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+                    if (copiedElement) {
+                        const x = selectedElement ? parseInt(selectedElement.style.left) + 20 : 100;
+                        const y = selectedElement ? parseInt(selectedElement.style.top) + 20 : 100;
+                        createElement(copiedElement.type, x, y, copiedElement);
+                        showToast('Element pasted');
+                    }
+                }
+                
+                // Delete
+                if (e.key === 'Delete' && selectedElement) {
+                    deleteSelected();
+                }
+                
+                // Save
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    saveToLocalStorage();
+                }
+                
+                // Undo/Redo
+                if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+                    e.preventDefault();
+                    undo();
+                }
+                if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
+                    e.preventDefault();
+                    redo();
                 }
             });
-        });
-
-        const video = document.querySelector('.container video');
-        if (video) {
-            observer.observe(video);
         }
+
+        // Auto-save functionality
+        setInterval(() => {
+            if (history.length > 0 && historyIndex === history.length - 1) {
+                saveToLocalStorage();
+            }
+        }, 30000); // Auto-save every 30 seconds
+
+        // Initial state save
+        window.addEventListener('load', () => {
+            setTimeout(saveState, 100);
+        });
     </script>
 </body>
 </html>
+
+
+<!-- 
+
+        /* Toolbar */
+        .toolbar {
+            width: 60px;
+            background: #1e1e1e;
+            padding: 10px 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            border-right: 1px solid #444;
+        }
+
+        .tool-btn {
+            width: 50px;
+            height: 50px;
+            background: #3a3a3a;
+            border: 1px solid #555;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .tool-btn:hover {
+            background: #4a4a4a;
+            border-color: #666;
+        }
+
+        .tool-btn.active {
+            background: #007acc;
+            border-color: #0099ff;
+        }
+
+        .tool-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 60px;
+            background: #000;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            font-size: 12px;
+            z-index: 1000;
+        }
+
+        .tool-btn:hover::after {
+            opacity: 1;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            height: 40px;
+            background: #1e1e1e;
+            border-bottom: 1px solid #444;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            gap: 10px;
+        }
+
+        .menu-btn {
+            background: #3a3a3a;
+            border: 1px solid #555;
+            color: #fff;
+            padding: 5px 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .menu-btn:hover {
+            background: #4a4a4a;
+        }
+
+        /* Workspace */
+        .workspace {
+            flex: 1;
+            display: flex;
+            background: #1e1e1e;
+        }
+
+        /* Canvas Container */
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #2a2a2a;
+            position: relative;
+            overflow: auto;
+        }
+
+        #canvas {
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            cursor: crosshair;
+        }
+
+        /* Right Panel */
+        .right-panel {
+            width: 300px;
+            background: #1e1e1e;
+            border-left: 1px solid #444;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Options Panel */
+        .options-panel {
+            padding: 15px;
+            border-bottom: 1px solid #444;
+        }
+
+        .option-group {
+            margin-bottom: 15px;
+        }
+
+        .option-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .option-group input[type="range"],
+        .option-group input[type="number"],
+        .option-group input[type="color"] {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .option-group input[type="range"] {
+            -webkit-appearance: none;
+            height: 5px;
+            background: #3a3a3a;
+            outline: none;
+        }
+
+        .option-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #007acc;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        /* Layers Panel */
+        .layers-panel {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .layers-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .layer-item {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            padding: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .layer-item:hover {
+            background: #333;
+        }
+
+        .layer-item.active {
+            background: #007acc;
+            border-color: #0099ff;
+        }
+
+        .layer-name {
+            font-size: 14px;
+        }
+
+        .layer-opacity {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* Bottom Status Bar */
+        .status-bar {
+            height: 25px;
+            background: #1e1e1e;
+            border-top: 1px solid #444;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 5px;
+            min-width: 300px;
+        }
+
+        .modal-header {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .modal-body {
+            margin-bottom: 15px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 8px 20px;
+            background: #007acc;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .modal-btn:hover {
+            background: #0099ff;
+        }
+
+        .modal-btn.secondary {
+            background: #3a3a3a;
+        }
+
+        .modal-btn.secondary:hover {
+            background: #4a4a4a;
+        }
+
+-->

@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photoshop Clone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #2d2d2d;
+            color: #fff;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <button class="tool-btn active" data-tool="select" data-tooltip="Select (V)">↖</button>
+            <button class="tool-btn" data-tool="move" data-tooltip="Move (V)">✋</button>
+            <button class="tool-btn" data-tool="brush" data-tooltip="Brush (B)">🖌</button>
+            <button class="tool-btn" data-tool="eraser" data-tooltip="Eraser (E)">🧹</button>
+            <button class="tool-btn" data-tool="line" data-tooltip="Line (L)">📏</button>
+            <button class="tool-btn" data-tool="rectangle" data-tooltip="Rectangle (R)">▢</button>
+            <button class="tool-btn" data-tool="circle" data-tooltip="Circle (C)">○</button>
+            <button class="tool-btn" data-tool="text" data-tooltip="Text (T)">T</button>
+            <button class="tool-btn" data-tool="eyedropper" data-tooltip="Eyedropper (I)">💧</button>
+            <button class="tool-btn" data-tool="fill" data-tooltip="Fill (G)">🪣</button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <button class="menu-btn" onclick="fileMenu.newFile()">New</button>
+                <button class="menu-btn" onclick="fileMenu.open()">Open</button>
+                <button class="menu-btn" onclick="fileMenu.save()">Save</button>
+                <button class="menu-btn" onclick="editMenu.undo()">Undo</button>
+                <button class="menu-btn" onclick="editMenu.redo()">Redo</button>
+                <button class="menu-btn" onclick="filterMenu.show()">Filters</button>
+            </div>
+
+            <!-- Workspace -->
+            <div class="workspace">
+                <!-- Canvas Container -->
+                <div class="canvas-container">
+                    <canvas id="canvas" width="800" height="600"></canvas>
+                </div>
+
+                <!-- Right Panel -->
+                <div class="right-panel">
+                    <!-- Options Panel -->
+                    <div class="options-panel">
+                        <div class="option-group">
+                            <label>Brush Size</label>
+                            <input type="range" id="brushSize" min="1" max="100" value="10">
+                            <input type="number" id="brushSizeNum" min="1" max="100" value="10">
+                        </div>
+                        <div class="option-group">
+                            <label>Opacity</label>
+                            <input type="range" id="opacity" min="0" max="100" value="100">
+                            <input type="number" id="opacityNum" min="0" max="100" value="100">
+                        </div>
+                        <div class="option-group">
+                            <label>Color</label>
+                            <input type="color" id="colorPicker" value="#000000">
+                        </div>
+                    </div>
+
+                    <!-- Layers Panel -->
+                    <div class="layers-panel">
+                        <div class="layers-header">
+                            <h3>Layers</h3>
+                            <button class="menu-btn" onclick="layerManager.addLayer()">+</button>
+                        </div>
+                        <div id="layersList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span id="statusText">Ready</span>
+                <span style="margin-left: auto;" id="cursorPos">0, 0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- New File Modal -->
+    <div id="newFileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">New Document</div>
+            <div class="modal-body">
+                <div class="option-group">
+                    <label>Width</label>
+                    <input type="number" id="newWidth" value="800" min="1" max="5000">
+                </div>
+                <div class="option-group">
+                    <label>Height</label>
+                    <input type="number" id="newHeight" value="600" min="1" max="5000">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn secondary" onclick="fileMenu.closeModal()">Cancel</button>
+                <button class="modal-btn" onclick="fileMenu.createNew()">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Modal -->
+    <div id="filterModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Filters</div>
+            <div class="modal-body">
+                <button class="menu-btn" onclick="filters.grayscale()">Grayscale</button>
+                <button class="menu-btn" onclick="filters.sepia()">Sepia</button>
+                <button class="menu-btn" onclick="filters.invert()">Invert</button>
+                <button class="menu-btn" onclick="filters.blur()">Blur</button>
+                <button class="menu-btn" onclick="filters.sharpen()">Sharpen</button>
+                <button class="menu-btn" onclick="filters.emboss()">Emboss</button>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn secondary" onclick="filterMenu.close()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Canvas and Context
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Application State
+        const app = {
+            currentTool: 'select',
+            isDrawing: false,
+            startX: 0,
+            startY: 0,
+            currentColor: '#000000',
+            brushSize: 10,
+            opacity: 100,
+            layers: [],
+            activeLayer: 0,
+            history: [],
+            historyStep: -1,
+            selection: null
+        };
+
+        // Layer Manager
+        const layerManager = {
+            addLayer() {
+                const layer = {
+                    id: Date.now(),
+                    name: `Layer ${app.layers.length + 1}`,
+                    canvas: document.createElement('canvas'),
+                    visible: true,
+                    opacity: 100
+                };
+                layer.canvas.width = canvas.width;
+                layer.canvas.height = canvas.height;
+                app.layers.push(layer);
+                this.renderLayersList();
+                this.setActiveLayer(app.layers.length - 1);
+                this.updateCanvas();
+            },
+
+            renderLayersList() {
+                const layersList = document.getElementById('layersList');
+                layersList.innerHTML = '';
+                
+                app.layers.slice().reverse().forEach((layer, index) => {
+                    const layerItem = document.createElement('div');
+                    layerItem.className = 'layer-item';
+                    if (app.layers.indexOf(layer) === app.activeLayer) {
+                        layerItem.classList.add('active');
+                    }
+                    
+                    layerItem.innerHTML = `
+                        <span class="layer-name">${layer.name}</span>
+                        <span class="layer-opacity">${layer.opacity}%</span>
+                    `;
+                    
+                    layerItem.onclick = () => this.setActiveLayer(app.layers.indexOf(layer));
+                    layersList.appendChild(layerItem);
+                });
+            },
+
+            setActiveLayer(index) {
+                app.activeLayer = index;
+                this.renderLayersList();
+            },
+
+            updateCanvas() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                app.layers.forEach(layer => {
+                    if (layer.visible) {
+                        ctx.globalAlpha = layer.opacity / 100;
+                        ctx.drawImage(layer.canvas, 0, 0);
+                    }
+                });
+                
+                ctx.globalAlpha = 1;
+            }
+        };
+
+        // Tools
+        const tools = {
+            select: {
+                mouseDown(e) {
+                    app.startX = e.offsetX;
+                    app.startY = e.offsetY;
+                    app.isDrawing = true;
+                },
+                mouseMove(e) {
+                    if (!app.isDrawing) return;
+                    // Draw selection rectangle
+                    layerManager.updateCanvas();
+                    ctx.strokeStyle = '#007acc';
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([5, 5]);
+                    ctx.strokeRect(
+                        app.startX,
+                        app.startY,
+                        e.offsetX - app.startX,
+                        e.offsetY - app.startY
+                    );
+                    ctx.setLineDash([]);
+                },
+                mouseUp(e) {
+                    app.isDrawing = false;
+                    app.selection = {
+                        x: Math.min(app.startX, e.offsetX),
+                        y: Math.min(app.startY, e.offsetY),
+                        width: Math.abs(e.offsetX - app.startX),
+                        height: Math.abs(e.offsetY - app.startY)
+                    };
+                }
+            },
+
+            move: {
+                mouseDown(e) {
+                    app.startX = e.offsetX;
+                    app.startY = e.offsetY;
+                    app.isDrawing = true;
+                },
+                mouseMove(e) {
+                    if (!app.isDrawing) return;
+                    // Move selected area or layer
+                },
+                mouseUp(e) {
+                    app.isDrawing = false;
+                }
+            },
+
+            brush: {
+                mouseDown(e) {
+                    app.isDrawing = true;
+                    this.draw(e);
+                },
+                mouseMove(e) {
+                    if (!app.isDrawing) return;
+                    this.draw(e);
+                },
+                mouseUp(e) {
+                    app.isDrawing = false;
+                    saveHistory();
+                },
+                draw(e) {
+                    const layer = app.layers[app.activeLayer];
+                    const layerCtx = layer.canvas.getContext('2d');
+                    
+                    layerCtx.globalAlpha = app.opacity / 100;
+                    layerCtx.strokeStyle = app.currentColor;
+                    layerCtx.fillStyle = app.currentColor;
+                    layerCtx.lineWidth = app.brushSize;
+                    layerCtx.lineCap = 'round';
+                    
+                    if (app.startX && app.startY) {
+                        layerCtx.beginPath();
+                        layerCtx.moveTo(app.startX, app.startY);
+                        layerCtx.lineTo(e.offsetX, e.offsetY);
+                        layerCtx.stroke();
+                    }
+                    
+                    app.startX = e.offsetX;
+                    app.startY = e.offsetY;
+                    layerManager.updateCanvas();
+                }
+            },
+
+            eraser: {
+                mouseDown(e) {
+                    app.isDrawing = true;
+                    this.erase(e);
+                },
+                mouseMove(e) {
+                    if (!app.isDrawing) return;
+                    this.erase(e);
+                },
+                mouseUp(e) {
+                    app.isDrawing = false;
+                    saveHistory();
+                },
+                erase(e) {
+                    const layer = app.layers[app.activeLayer];
+                    const layerCtx = layer.canvas.getContext('2d');
+                    
+                    layerCtx.globalCompositeOperation = 'destination-out';
+                    layerCtx.lineWidth = app.brushSize;
+                    layerCtx.lineCap = 'round';
+                    
+                    if (app.startX && app.startY) {
+                        layerCtx.beginPath();
+                        layerCtx.moveTo(app.startX, app.startY);
+                        layerCtx.lineTo(e.offsetX, e.offsetY);
+                        layerCtx.stroke();
+                    }
+                    
+                    layerCtx.globalCompositeOperation = 'source-over';
+                    app.startX = e.offsetX;
+                    app.startY = e.offsetY;
+                    layerManager.updateCanvas();
+                }
+            },
+
+            line: {
+                mouseDown(e) {
+                    app.startX = e.offsetX;
+                    app.startY = e.offsetY;
+                    app.isDrawing = true;
+                },
+                mouseMove(e) {
+                    if (!app.isDrawing) return;
+                    layerManager.updateCanvas();
+                    ctx.strokeStyle = app.currentColor;
+                    ctx.lineWidth = app.brushSize;
+                    ctx.beginPath();
+                    ctx.moveTo(app.startX, app.startY);
+                    ctx.lineTo(e.offsetX, e.offsetY);
+                    ctx.stroke();
+                },
+                mouseUp(e) {
+                    app.isDrawing = false;
+                    const layer = app.layers[app.activeLayer];
+                    const layerCtx = layer.canvas.getContext('2d');
+                    
+                    layerCtx.globalAlpha = app.opacity / 100;
+                    layerCtx.strokeStyle = app.currentColor;
+                    layerCtx.lineWidth = app.brushSize;
+                    layerCtx.beginPath();
+                    layerCtx.moveTo(app.startX, app.startY);
+                    layerCtx.lineTo(e.offsetX, e.offsetY);
+                    layerCtx.stroke();
+                    
+                    layerManager.updateCanvas();
+                    saveHistory();
+                }
+            },
+
+            rectangle: {
+                mouseDown(e) {
+                    app.startX = e.offsetX;
+                    app.startY = e.offsetY;
+                    app.isDrawing = true;
+                },
+                mouseMove(e) {
+                    if (!app.isDrawing) return;
+                    layerManager.updateCanvas();
+                    ctx.strokeStyle = app.currentColor;
+                    ctx.lineWidth = app.brushSize;
+                    ctx.strokeRect(
+                        app.startX,
+                        app.startY,
+                        e.offsetX - app.startX,
+                        e.offsetY - app.startY
+                    );
+                },
+                mouseUp(e) {
+                    app.isDrawing = false;
+                    const layer = app.layers[app.activeLayer];
+                    const layerCtx = layer.canvas.getContext('2d');
+                    
+                    layerCtx.globalAlpha = app.opacity / 100;
+                    layerCtx.strokeStyle = app.currentColor;
+                    layerCtx.lineWidth = app.brushSize;
+                    layerCtx.strokeRect(
+                        app.startX,
+                        app.startY,
+                        e.offsetX - app.startX,
+                        e.offsetY - app.startY
+                    );
+                    
+                    layerManager.updateCanvas();
+                    saveHistory();
+                }
+            },
+
+            circle: {
+                mouseDown(e) {
+                    app.startX = e.offsetX;
+                    app.startY = e.offsetY;
+                    app.isDrawing = true;
+                },
+                mouseMove(e) {
+                    if (!app.isDrawing) return;
+                    layerManager.updateCanvas();
+                    ctx.strokeStyle = app.currentColor;
+                    ctx.lineWidth = app.brushSize;
+                    ctx.beginPath();
+                    const radius = Math.sqrt(
+                        Math.pow(e.offsetX - app.startX, 2) +
+                        Math.pow(e.offsetY - app.startY, 2)
+                    );
+                    ctx.arc(app.startX, app.startY, radius, 0, 2 * Math.PI);
+                    ctx.stroke();
+                },
+                mouseUp(e) {
+                    app.isDrawing = false;
+                    const layer = app.layers[app.activeLayer];
+                    const layerCtx = layer.canvas.getContext('2d');
+                    
+                    layerCtx.globalAlpha = app.opacity / 100;
+                    layerCtx.strokeStyle = app.currentColor;
+                    layerCtx.lineWidth = app.brushSize;
+                    layerCtx.beginPath();
+                    const radius = Math.sqrt(
+                        Math.pow(e.offsetX - app.startX, 2) +
+                        Math.pow(e.offsetY - app.startY, 2)
+                    );
+                    layerCtx.arc(app.startX, app.startY, radius, 0, 2 * Math.PI);
+                    layerCtx.stroke();
+                    
+                    layerManager.updateCanvas();
+                    saveHistory();
+                }
+            },
+
+            text: {
+                mouseDown(e) {
+                    const text = prompt('Enter text:');
+                    if (text) {
+                        const layer = app.layers[app.activeLayer];
+                        const layerCtx = layer.canvas.getContext('2d');
+                        
+                        layerCtx.globalAlpha = app.opacity / 100;
+                        layerCtx.fillStyle = app.currentColor;
+                        layerCtx.font = `${app.brushSize * 3}px Arial`;
+                        layerCtx.fillText(text, e.offsetX, e.offsetY);
+                        
+                        layerManager.updateCanvas();
+                        saveHistory();
+                    }
+                },
+                mouseMove(e) {},
+                mouseUp(e) {}
+            },
+
+            eyedropper: {
+                mouseDown(e) {
+                    const imageData = ctx.getImageData(e.offsetX, e.offsetY, 1, 1);
+                    const pixel = imageData.data;
+                    const color = `#${pixel[0].toString(16).padStart(2, '0')}${pixel[1].toString(16).padStart(2, '0')}${pixel[2].toString(16).padStart(2, '0')}`;
+                    document.getElementById('colorPicker').value = color;
+                    app.currentColor = color;
+                },
+                mouseMove(e) {},
+                mouseUp(e) {}
+            },
+
+            fill: {
+                mouseDown(e) {
+                    const layer = app.layers[app.activeLayer];
+                    const layerCtx = layer.canvas.getContext('2d');
+                    
+                    layerCtx.globalAlpha = app.opacity / 100;
+                    layerCtx.fillStyle = app.currentColor;
+                    layerCtx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    layerManager.updateCanvas();
+                    saveHistory();
+                },
+                mouseMove(e) {},
+                mouseUp(e) {}
+            }
+        };
+
+        // Filters
+        const filters = {
+            grayscale() {
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                for (let i = 0; i < data.length; i += 4) {
+                    const gray = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+                    data[i] = gray;
+                    data[i + 1] = gray;
+                    data[i + 2] = gray;
+                }
+                
+                ctx.putImageData(imageData, 0, 0);
+                filterMenu.close();
+                saveHistory();
+            },
+
+            sepia() {
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    
+                    data[i] = Math.min(255, (r * 0.393) + (g * 0.769) + (b * 0.189));
+                    data[i + 1] = Math.min(255, (r * 0.349) + (g * 0.686) + (b * 0.168));
+                    data[i + 2] = Math.min(255, (r * 0.272) + (g * 0.534) + (b * 0.131));
+                }
+                
+                ctx.putImageData(imageData, 0, 0);
+                filterMenu.close();
+                saveHistory();
+            },
+
+            invert() {
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = 255 - data[i];
+                    data[i + 1] = 255 - data[i + 1];
+                    data[i + 2] = 255 - data[i + 2];
+                }
+                
+                ctx.putImageData(imageData, 0, 0);
+                filterMenu.close();
+                saveHistory();
+            },
+
+            blur() {
+                ctx.filter = 'blur(5px)';
+                ctx.drawImage(canvas, 0, 0);
+                ctx.filter = 'none';
+                filterMenu.close();
+                saveHistory();
+            },
+
+            sharpen() {
+                ctx.filter = 'contrast(200%)';
+                ctx.drawImage(canvas, 0, 0);
+                ctx.filter = 'none';
+                filterMenu.close();
+                saveHistory();
+            },
+
+            emboss() {
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                const width = imageData.width;
+                const height = imageData.height;
+                
+                for (let y = 1; y < height - 1; y++) {
+                    for (let x = 1; x < width - 1; x++) {
+                        const idx = (y * width + x) * 4;
+                        
+                        const r1 = data[idx - width * 4 - 4];
+                        const g1 = data[idx - width * 4 - 3];
+                        const b1 = data[idx - width * 4 - 2];
+                        
+                        const r2 = data[idx + width * 4 + 4];
+                        const g2 = data[idx + width * 4 + 5];
+                        const b2 = data[idx + width * 4 + 6];
+                        
+                        data[idx] = Math.min(255, Math.max(0, r2 - r1 + 128));
+                        data[idx + 1] = Math.min(255, Math.max(0, g2 - g1 + 128));
+                        data[idx + 2] = Math.min(255, Math.max(0, b2 - b1 + 128));
+                    }
+                }
+                
+                ctx.putImageData(imageData, 0, 0);
+                filterMenu.close();
+                saveHistory();
+            }
+        };
+
+        // File Menu
+        const fileMenu = {
+            newFile() {
+                document.getElementById('newFileModal').style.display = 'flex';
+            },
+
+            createNew() {
+                const width = parseInt(document.getElementById('newWidth').value);
+                const height = parseInt(document.getElementById('newHeight').value);
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                app.layers = [];
+                app.history = [];
+                app.historyStep = -1;
+                
+                layerManager.addLayer();
+                this.closeModal();
+            },
+
+            open() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                            ctx.drawImage(img, 0, 0);
+                            
+                            app.layers = [];
+                            app.history = [];
+                            app.historyStep = -1;
+                            
+                            layerManager.addLayer();
+                            const layer = app.layers[0];
+                            layer.canvas.getContext('2d').drawImage(img, 0, 0);
+                            layerManager.updateCanvas();
+                        };
+                        img.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                };
+                input.click();
+            },
+
+            save() {
+                const link = document.createElement('a');
+                link.download = 'image.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            },
+
+            closeModal() {
+                document.getElementById('newFileModal').style.display = 'none';
+            }
+        };
+
+        // Edit Menu
+        const editMenu = {
+            undo() {
+                if (app.historyStep > 0) {
+                    app.historyStep--;
+                    const layer = app.layers[app.activeLayer];
+                    layer.canvas.getContext('2d').putImageData(app.history[app.historyStep], 0, 0);
+                    layerManager.updateCanvas();
+                }
+            },
+
+            redo() {
+                if (app.historyStep < app.history.length - 1) {
+                    app.historyStep++;
+                    const layer = app.layers[app.activeLayer];
+                    layer.canvas.getContext('2d').putImageData(app.history[app.historyStep], 0, 0);
+                    layerManager.updateCanvas();
+                }
+            }
+        };
+
+        // Filter Menu
+        const filterMenu = {
+            show() {
+                document.getElementById('filterModal').style.display = 'flex';
+            },
+
+            close() {
+                document.getElementById('filterModal').style.display = 'none';
+            }
+        };
+
+        // History Management
+        function saveHistory() {
+            const layer = app.layers[app.activeLayer];
+            const imageData = layer.canvas.getContext('2d').getImageData(0, 0, layer.canvas.width, layer.canvas.height);
+            
+            app.historyStep++;
+            if (app.historyStep < app.history.length) {
+                app.history.length = app.historyStep;
+            }
+            
+            app.history.push(imageData);
+            
+            if (app.history.length > 50) {
+                app.history.shift();
+                app.historyStep--;
+            }
+        }
+
+        // Event Listeners
+        canvas.addEventListener('mousedown', (e) => {
+            tools[app.currentTool].mouseDown(e);
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            tools[app.currentTool].mouseMove(e);
+            document.getElementById('cursorPos').textContent = `${e.offsetX}, ${e.offsetY}`;
+        });
+
+        canvas.addEventListener('mouseup', (e) => {
+            tools[app.currentTool].mouseUp(e);
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            app.isDrawing = false;
+        });
+
+        // Tool Selection
+        document.querySelectorAll('.tool-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                app.currentTool = btn.dataset.tool;
+                canvas.style.cursor = app.currentTool === 'select' ? 'default' : 'crosshair';
+            });
+        });
+
+        // Options Panel
+        document.getElementById('brushSize').addEventListener('input', (e) => {
+            app.brushSize = e.target.value;
+            document.getElementById('brushSizeNum').value = e.target.value;
+        });
+
+        document.getElementById('brushSizeNum').addEventListener('input', (e) => {
+            app.brushSize = e.target.value;
+            document.getElementById('brushSize').value = e.target.value;
+        });
+
+        document.getElementById('opacity').addEventListener('input', (e) => {
+            app.opacity = e.target.value;
+            document.getElementById('opacityNum').value = e.target.value;
+        });
+
+        document.getElementById('opacityNum').addEventListener('input', (e) => {
+            app.opacity = e.target.value;
+            document.getElementById('opacity').value = e.target.value;
+        });
+
+        document.getElementById('colorPicker').addEventListener('change', (e) => {
+            app.currentColor = e.target.value;
+        });
+
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'z':
+                        e.preventDefault();
+                        editMenu.undo();
+                        break;
+                    case 'y':
+                        e.preventDefault();
+                        editMenu.redo();
+                        break;
+                    case 's':
+                        e.preventDefault();
+                        fileMenu.save();
+                        break;
+                    case 'n':
+                        e.preventDefault();
+                        fileMenu.newFile();
+                        break;
+                    case 'o':
+                        e.preventDefault();
+                        fileMenu.open();
+                        break;
+                }
+            }
+            
+            // Tool shortcuts
+            switch(e.key.toLowerCase()) {
+                case 'v':
+                    document.querySelector('[data-tool="select"]').click();
+                    break;
+                case 'b':
+                    document.querySelector('[data-tool="brush"]').click();
+                    break;
+                case 'e':
+                    document.querySelector('[data-tool="eraser"]').click();
+                    break;
+                case 'l':
+                    document.querySelector('[data-tool="line"]').click();
+                    break;
+                case 'r':
+                    document.querySelector('[data-tool="rectangle"]').click();
+                    break;
+                case 'c':
+                    document.querySelector('[data-tool="circle"]').click();
+                    break;
+                case 't':
+                    document.querySelector('[data-tool="text"]').click();
+                    break;
+                case 'i':
+                    document.querySelector('[data-tool="eyedropper"]').click();
+                    break;
+                case 'g':
+                    document.querySelector('[data-tool="fill"]').click();
+                    break;
+            }
+        });
+
+        // Initialize
+        layerManager.addLayer();
+        document.getElementById('statusText').textContent = 'Ready - Press Ctrl+Z for shortcuts';
+    </script>
+</body>
+</html>

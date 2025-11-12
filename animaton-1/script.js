@@ -106,9 +106,31 @@ const scroll = new LocomotiveScroll({
         }
 
 
-        const accountBtn = document.querySelector('.js-open');
+const accountBtn = document.querySelector('.js-open');
 const accountBox = document.querySelector('.account');
+const header = document.getElementById('header')
 
 accountBtn.addEventListener('click', () => {
     accountBox.classList.toggle('open');
 });
+
+
+let currentMenu = null
+
+function showMenu(menu){
+  hideMenu()
+  const menuElm = document.getElementById(menu + '-menu')
+  if(menuElm){
+    menuElm.classList.add('active')
+    header.classList.add('white-bg')
+    currentMenu = menuElm
+  }
+}
+
+function hideMenu(){
+  if(currentMenu){
+    currentMenu.classList.remove('active')
+    header.classList.remove('white-bg')
+    currentMenu = null
+  }
+}
